@@ -79,6 +79,11 @@ app.post("/register", (req, res) => {
         });
 });
 
+app.get("/logout", (req, res) => {
+    req.session = null;
+    res.redirect("/");
+});
+
 // ensure that if the user is logged out, the url is  /welcome
 app.get("*", function(req, res) {
     if (req.session.userId) {

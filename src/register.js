@@ -22,6 +22,9 @@ export default class Registration extends React.Component {
                         error: true
                     });
                 }
+            })
+            .catch(err => {
+                console.log("Registration error: ", err);
             });
     }
     handleChange({ target }) {
@@ -58,6 +61,9 @@ export default class Registration extends React.Component {
                     onChange={e => this.handleChange(e)}
                 />
                 <button onClick={() => this.submit()}>Register</button>
+                <p>
+                    Not a memeber? <a href="#">Log in</a>
+                </p>
             </div>
         );
     }
