@@ -9,8 +9,9 @@ export default class Welcome extends React.Component {
     render() {
         return (
             <div>
-                <div className="BigLogo">
-                    <h1>My Social Network</h1>
+                <div className="welcome-logo">
+                    <img src="corona-love.png" />
+                    <h1>IN THE TIME OF CORONA</h1>
                 </div>
                 <Registration />
             </div>

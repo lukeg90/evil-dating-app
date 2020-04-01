@@ -4,10 +4,12 @@ import Welcome from "./welcome";
 
 let elem;
 
+console.log(location.pathname);
+
 if (location.pathname == "/welcome") {
     elem = <Welcome />;
 } else {
-    elem = <h1>Logo goes here</h1>;
+    elem = <img className="nav-logo" src="corona-love.png"></img>;
 }
 
 ReactDOM.render(elem, document.querySelector("main"));

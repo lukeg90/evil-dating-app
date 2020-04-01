@@ -27,15 +27,9 @@ if (process.env.NODE_ENV != "production") {
     app.use("/bundle.js", (req, res) => res.sendFile(`${__dirname}/bundle.js`));
 }
 
-app.use(
-    express.urlencoded({
-        extended: false
-    })
-);
-
 app.use(express.json());
 
-app.use(express.static("./src"));
+app.use(express.static("public"));
 
 app.use(
     cookieSession({
