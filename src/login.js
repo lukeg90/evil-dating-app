@@ -1,17 +1,14 @@
 import React from "react";
 import axios from "./axios";
-import { Link } from "react-router-dom";
 
-export default class Registration extends React.Component {
+export default class Login extends React.Component {
     constructor(props) {
         super(props);
         this.state = {};
     }
     submit() {
         axios
-            .post("/register", {
-                first: this.state.first,
-                last: this.state.last,
+            .post("/login", {
                 email: this.state.email,
                 password: this.state.password
             })
@@ -20,12 +17,13 @@ export default class Registration extends React.Component {
                     location.replace("/");
                 } else {
                     this.setState({
-                        error: true
+                        error: true,
+                        errorMessage: data.error
                     });
                 }
             })
             .catch(err => {
-                console.log("Registration error: ", err);
+                console.log("Login error: ", err);
                 this.setState({
                     error: true
                 });
@@ -38,24 +36,12 @@ export default class Registration extends React.Component {
     }
     render() {
         return (
-            <div className="registration">
+            <div className="login">
                 {this.state.error && (
-                    <div className="error">Oops! Something went wrong.</div>
+                    <div className="error">
+                        Oops, something went wrong. {this.state.errorMessage}
+                    </div>
                 )}
-                <input
-                    name="first"
-                    type="text"
-                    placeholder="First name"
-                    onChange={e => this.handleChange(e)}
-                />
-                <br />
-                <input
-                    name="last"
-                    type="text"
-                    placeholder="Last name"
-                    onChange={e => this.handleChange(e)}
-                />
-                <br />
                 <input
                     name="email"
                     type="email"
@@ -70,10 +56,7 @@ export default class Registration extends React.Component {
                     onChange={e => this.handleChange(e)}
                 />
                 <br />
-                <button onClick={() => this.submit()}>Register</button>
-                <p>
-                    Already a member? <Link to="/login">Log in</Link>
-                </p>
+                <button onClick={() => this.submit()}>Log in</button>
             </div>
         );
     }
