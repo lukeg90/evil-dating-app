@@ -57,6 +57,10 @@ input {
     text-align: center;
 }
 
+.reset-password {
+    text-align: center;
+}
+
 button {
     background: white;
     color: hotpink;

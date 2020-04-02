@@ -5,6 +5,8 @@ const db = require("./utils/db");
 const cookieSession = require("cookie-session");
 const { hash, compare } = require("./utils/bc");
 const csurf = require("csurf");
+const ses = require("./utils/ses");
+const cryptoRandomString = require("crypto-random-string");
 
 let secrets;
 if (process.env.NODE_ENV == "production") {
@@ -123,6 +125,81 @@ app.post("/login", (req, res) => {
 app.get("/logout", (req, res) => {
     req.session = null;
     res.redirect("/");
+});
+
+app.post("/password/reset/start", (req, res) => {
+    const { email } = req.body;
+    // verify email address is in users table
+    db.getUserByEmail(email)
+        .then(({ rows }) => {
+            if (rows.length > 0) {
+                const secretCode = cryptoRandomString({
+                    length: 6
+                });
+                // insert secret code into new table
+                return db.addCode(email, secretCode);
+            } else {
+                res.json({
+                    success: false,
+                    error: "This email address has not been registered"
+                });
+                throw new Error("Email address not found in table");
+            }
+        })
+        .then(({ rows }) => {
+            console.log("Code added to table successfully: ", rows[0]);
+            // send email
+            return ses.sendEmail(
+                rows[0].email,
+                "Corona Love Password reset",
+                `You recently requested a password reset. Please enter the following code to reset your password: ${rows[0].code}`
+            );
+        })
+        .then(() => {
+            res.json({
+                success: true
+            });
+        })
+        .catch(err => {
+            console.log("Error in password reset start: ", err);
+            res.json({
+                success: false
+            });
+        });
+});
+
+app.post("/password/reset/verify", (req, res) => {
+    const { email, code, newPassword } = req.body;
+    console.log("Email: ", email);
+    // find code in database by email address
+    db.getCode(email)
+        .then(({ rows }) => {
+            console.log("code in db: ", rows[rows.length - 1].code);
+            // compare req.body.code with code in database
+            if (code == rows[rows.length - 1].code) {
+                // hash password
+                return hash(newPassword);
+            } else {
+                res.json({
+                    success: false,
+                    error: "Code does not match"
+                });
+                throw new Error("Code does not match");
+            }
+        })
+        .then(hashedPw => {
+            // update users table with new password
+            return db.updatePassword(email, hashedPw);
+        })
+        .then(() => {
+            res.json({
+                success: true
+            });
+        })
+        .catch(err => {
+            console.log("Error verifying code", err);
+            res.json({ success: false });
+        });
 });
 
 // ensure that if the user is logged out, the url is  /welcome
