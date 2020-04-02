@@ -175,7 +175,7 @@ app.post("/password/reset/verify", (req, res) => {
     db.getCode(email)
         .then(({ rows }) => {
             console.log("code in db: ", rows[rows.length - 1].code);
-            // compare req.body.code with code in database
+            // compare req.body.code with most recent code in database
             if (code == rows[rows.length - 1].code) {
                 // hash password
                 return hash(newPassword);
@@ -199,6 +199,24 @@ app.post("/password/reset/verify", (req, res) => {
         .catch(err => {
             console.log("Error verifying code", err);
             res.json({ success: false });
+        });
+});
+
+app.get("/user", (req, res) => {
+    db.getUserById(req.session.userId)
+        .then(({ rows }) => {
+            console.log("uder data: ", rows[0]);
+            console.log("Image URL: ", rows[0].image_url);
+            res.json({
+                id: rows[0].id,
+                first: rows[0].first,
+                last: rows[0].last,
+                imgUrl: rows[0].image_url,
+                bio: rows[0].bio
+            });
+        })
+        .catch(err => {
+            console.log("Error getting user from db: ", err);
         });
 });
 

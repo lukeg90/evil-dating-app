@@ -25,6 +25,15 @@ exports.getUserByEmail = email => {
     return db.query(q, params);
 };
 
+exports.getUserById = id => {
+    const q = `
+        SELECT id, first, last, bio, image_url FROM users
+        WHERE id = $1
+    `;
+    const params = [id];
+    return db.query(q, params);
+};
+
 exports.addCode = (email, code) => {
     const q = `
         INSERT INTO codes (email, code)

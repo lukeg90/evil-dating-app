@@ -35,6 +35,14 @@ body {
     object-fit: cover;
 }
 
+.nav-profile-pic {
+    height: 80px;
+    width: 80px;
+    float: right;
+    border: 3px solid white;
+    border-radius: 5px;
+}
+
 input {
     margin: 5px;
     height: 35px;
