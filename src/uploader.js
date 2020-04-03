@@ -28,13 +28,17 @@ export default class Uploader extends React.Component {
     render() {
         return (
             <div className="uploader-modal">
-                <h1>Upload a profile picture</h1>
-                <input
-                    type="file"
-                    name="profile-pic"
-                    accept="image/*"
-                    onChange={e => this.uploadImage(e)}
-                ></input>
+                <h1>Update your profile picture</h1>
+                <label htmlFor="profile-pic" className="custom-file-upload">
+                    <input
+                        type="file"
+                        name="profile-pic"
+                        id="profile-pic"
+                        accept="image/*"
+                        onChange={e => this.uploadImage(e)}
+                    />
+                    Choose File
+                </label>
                 {this.state.error && (
                     <div className="error">Oops, something went wrong</div>
                 )}

@@ -41,6 +41,7 @@ body {
     float: right;
     border: 3px solid white;
     border-radius: 5px;
+    cursor: pointer;
 }
 
 input {
@@ -84,4 +85,33 @@ button {
 button:hover {
     background: hotpink;
     color: white;
+}
+
+.uploader-modal {
+    position: fixed;
+    height: 200px;
+    width: 700px;
+    left: 50%;
+    top: 200px;
+    margin-left: -350px;
+    text-align: center;
+    border: 5px solid white;
+    padding-top: 20px;
+}
+
+input[type="file"] {
+    display: none;
+}
+
+.custom-file-upload {
+    font-weight: bolder;
+    border: 1px solid white;
+    display: inline-block;
+    padding: 5px 10px;
+    cursor: pointer;
+}
+
+.custom-file-upload:hover {
+    background: white;
+    color: hotpink;
 }
