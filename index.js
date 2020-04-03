@@ -7,6 +7,11 @@ const { hash, compare } = require("./utils/bc");
 const csurf = require("csurf");
 const ses = require("./utils/ses");
 const cryptoRandomString = require("crypto-random-string");
+const multer = require("multer");
+const uidSafe = require("uid-safe");
+const path = require("path");
+const s3 = require("./utils/s3");
+const conf = require("./config");
 
 let secrets;
 if (process.env.NODE_ENV == "production") {
@@ -29,6 +34,24 @@ if (process.env.NODE_ENV != "production") {
 } else {
     app.use("/bundle.js", (req, res) => res.sendFile(`${__dirname}/bundle.js`));
 }
+
+const diskStorage = multer.diskStorage({
+    destination: function(req, file, callback) {
+        callback(null, __dirname + "/uploads");
+    },
+    filename: function(req, file, callback) {
+        uidSafe(24).then(function(uid) {
+            callback(null, uid + path.extname(file.originalname));
+        });
+    }
+});
+
+const uploader = multer({
+    storage: diskStorage,
+    limits: {
+        fileSize: 2097152
+    }
+});
 
 app.use(express.json());
 
@@ -217,6 +240,25 @@ app.get("/user", (req, res) => {
         })
         .catch(err => {
             console.log("Error getting user from db: ", err);
+        });
+});
+
+app.post("/user/image", uploader.single("image"), s3.upload, (req, res) => {
+    console.log("file: ", req.file);
+    let imageUrl = conf.s3Url + req.file.filename;
+    db.addImage(req.session.userId, imageUrl)
+        .then(({ rows }) => {
+            console.log("Successfully added image to db: ", rows[0].image_url);
+            res.json({
+                success: true,
+                imgUrl: rows[0].image_url
+            });
+        })
+        .catch(err => {
+            console.log("Error adding image to db ", err);
+            res.json({
+                success: false
+            });
         });
 });
 

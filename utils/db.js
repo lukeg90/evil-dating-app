@@ -63,3 +63,14 @@ exports.updatePassword = (email, password) => {
     const params = [email, password];
     return db.query(q, params);
 };
+
+exports.addImage = (id, image) => {
+    const q = `
+        UPDATE users
+        SET image_url = $2
+        WHERE id = $1
+        RETURNING image_url    
+    `;
+    const params = [id, image];
+    return db.query(q, params);
+};
