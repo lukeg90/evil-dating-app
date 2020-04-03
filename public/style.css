@@ -4,6 +4,10 @@
     color: white;
 }
 
+header {
+    margin-bottom: 50px;
+}
+
 .error {
     font-size: larger;
     font-weight: bold;
@@ -36,6 +40,7 @@ body {
 }
 
 .nav-profile-pic {
+    object-fit: cover;
     height: 80px;
     width: 80px;
     float: right;
@@ -96,7 +101,19 @@ button:hover {
     margin-left: -350px;
     text-align: center;
     border: 5px solid white;
-    padding-top: 20px;
+    background: slategray;
+}
+
+.modal-text {
+    margin-top: 40px;
+}
+
+.close-modal {
+    position: absolute;
+    right: 10px;
+    margin: 0;
+    font-weight: bolder;
+    cursor: pointer;
 }
 
 input[type="file"] {
@@ -114,4 +131,13 @@ input[type="file"] {
 .custom-file-upload:hover {
     background: white;
     color: hotpink;
+}
+
+.profile-pic {
+    height: 300px;
+    width: 300px;
+    object-fit: cover;
+    border: 2px solid white;
+    border-radius: 5px;
+    cursor: pointer;
 }

@@ -1,6 +1,8 @@
 import React from "react";
 import axios from "./axios";
+import Profile from "./profile";
 import ProfilePic from "./profile-pic";
+// import BioEditor from "./bio-editor";
 import Uploader from "./uploader";
 
 export default class App extends React.Component {
@@ -11,16 +13,25 @@ export default class App extends React.Component {
         };
     }
     componentDidMount() {
-        axios.get("/user").then(({ data }) => {
-            this.setState(data);
-            console.log("Current user: ", this.state.first);
-        });
+        axios
+            .get("/user")
+            .then(({ data }) => {
+                if (!data.imgUrl) {
+                    data.imgUrl = "/default.png";
+                }
+                this.setState(data);
+                console.log("Current user: ", this.state.first);
+            })
+            .catch(err => {
+                console.log("Error fetching user data: ", err);
+            });
     }
-    toggleUploader() {
-        this.setState({
-            showUploader: !this.state.showUploader
-        });
+    showUploader() {
+        this.setState({ showUploader: true });
         console.log("Show uploader: ", this.state.showUploader);
+    }
+    hideUploader() {
+        this.setState({ showUploader: false });
     }
     setProfilePic(url) {
         this.setState({
@@ -35,18 +46,42 @@ export default class App extends React.Component {
     }
     render() {
         return (
-            <div>
-                <img className="nav-logo" src="corona-love.png"></img>
-                <ProfilePic
-                    first={this.state.first}
-                    last={this.state.last}
-                    imgUrl={this.state.imgUrl}
-                    toggleUploader={() => this.toggleUploader()}
-                />
+            <React.Fragment>
+                <header>
+                    <img className="nav-logo" src="corona-love.png" />
+                    <img
+                        className="nav-profile-pic"
+                        src={this.state.imgUrl}
+                        alt={this.state.first}
+                        onClick={() => this.showUploader()}
+                    />
+                </header>
+                <div className="profile">
+                    <Profile
+                        first={this.state.first}
+                        last={this.state.last}
+                        profilePic={
+                            <ProfilePic
+                                first={this.state.first}
+                                imgUrl={this.state.imgUrl}
+                                showUploader={() => this.showUploader()}
+                            />
+                        }
+                        // bioEditor={
+                        //     <BioEditor
+                        //         bio={this.state.bio}
+                        //         setBio={this.setBio}
+                        //     />
+                        // }
+                    />
+                </div>
                 {this.state.showUploader && (
-                    <Uploader setProfilePic={url => this.setProfilePic(url)} />
+                    <Uploader
+                        setProfilePic={url => this.setProfilePic(url)}
+                        hideUploader={() => this.hideUploader()}
+                    />
                 )}
-            </div>
+            </React.Fragment>
         );
     }
 }

@@ -1,16 +1,13 @@
 import React from "react";
 
-export default function ProfilePic({ first, last, imgUrl, toggleUploader }) {
-    imgUrl = imgUrl || "/default.png";
-    let imgAlt = `${first}${last}`;
-    console.log("image alt: ", imgAlt);
+export default function ProfilePic({ first, imgUrl, showUploader }) {
     return (
         <React.Fragment>
             <img
-                className="nav-profile-pic"
+                className="profile-pic"
                 src={imgUrl}
-                alt={imgAlt}
-                onClick={toggleUploader}
+                alt={first}
+                onClick={showUploader}
             />
         </React.Fragment>
     );
