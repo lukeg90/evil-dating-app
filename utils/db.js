@@ -27,7 +27,7 @@ exports.getUserByEmail = email => {
 
 exports.getUserById = id => {
     const q = `
-        SELECT id, first, last, bio, image_url FROM users
+        SELECT id, first, last, image_url FROM users
         WHERE id = $1
     `;
     const params = [id];

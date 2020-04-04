@@ -50,7 +50,7 @@ body {
 }
 
 input {
-    margin: 5px;
+    margin: 5px 5px 5px 0;
     height: 35px;
     width: 300px;
     border-radius: 10px;
@@ -160,4 +160,23 @@ input[type="file"] {
     color: hotpink;
     border-radius: 10px;
     font-size: larger;
+}
+
+input[type="radio"] {
+    height: 20px;
+    width: 20px;
+}
+
+select {
+    background: white;
+    color: hotpink;
+    border-radius: 10px;
+    height: 35px;
+    width: 200px;
+    font-size: larger;
+    margin: 5px 5px 5px 0;
+}
+
+option {
+    color: hotpink;
 }

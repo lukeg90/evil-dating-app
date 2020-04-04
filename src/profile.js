@@ -1,6 +1,6 @@
 import React from "react";
 
-export default function Profile({ first, last, profilePic, bioEditor }) {
+export default function Profile({ first, last, profilePic, profileEditor }) {
     return (
         <React.Fragment>
             {profilePic}
@@ -8,7 +8,7 @@ export default function Profile({ first, last, profilePic, bioEditor }) {
                 <h1 className="bioName">
                     {first} {last}
                 </h1>
-                {bioEditor}
+                {profileEditor}
             </div>
         </React.Fragment>
     );
