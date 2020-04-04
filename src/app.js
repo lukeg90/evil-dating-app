@@ -2,7 +2,7 @@ import React from "react";
 import axios from "./axios";
 import Profile from "./profile";
 import ProfilePic from "./profile-pic";
-// import BioEditor from "./bio-editor";
+import BioEditor from "./bio-editor";
 import Uploader from "./uploader";
 
 export default class App extends React.Component {
@@ -44,6 +44,10 @@ export default class App extends React.Component {
             this.state.imgUrl
         );
     }
+    setBio(bioText) {
+        this.setState({ bio: bioText });
+        console.log("bio updated in App: ", this.state.bio);
+    }
     render() {
         return (
             <React.Fragment>
@@ -67,12 +71,12 @@ export default class App extends React.Component {
                                 showUploader={() => this.showUploader()}
                             />
                         }
-                        // bioEditor={
-                        //     <BioEditor
-                        //         bio={this.state.bio}
-                        //         setBio={this.setBio}
-                        //     />
-                        // }
+                        bioEditor={
+                            <BioEditor
+                                bio={this.state.bio}
+                                setBio={bioText => this.setBio(bioText)}
+                            />
+                        }
                     />
                 </div>
                 {this.state.showUploader && (

@@ -133,6 +133,10 @@ input[type="file"] {
     color: hotpink;
 }
 
+.profile {
+    display: flex;
+}
+
 .profile-pic {
     height: 300px;
     width: 300px;
@@ -140,4 +144,20 @@ input[type="file"] {
     border: 2px solid white;
     border-radius: 5px;
     cursor: pointer;
+}
+
+.bio {
+    margin-left: 50px;
+}
+
+.bioName {
+    margin-top: 20px;
+}
+
+.bio textarea {
+    width: 400px;
+    height: 150px;
+    color: hotpink;
+    border-radius: 10px;
+    font-size: larger;
 }
