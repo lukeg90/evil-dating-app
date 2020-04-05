@@ -180,3 +180,38 @@ select {
 option {
     color: hotpink;
 }
+
+.editorListElement {
+    position: relative;
+    background: white;
+    font-size: larger;
+    padding: 10px;
+    display: inline-block;
+    border-radius: 5px;
+    margin: 5px;
+}
+
+.editorListText {
+    color: hotpink;
+    margin: 10px;
+}
+
+.editorRemoveListElement {
+    display: none;
+}
+
+.editorListElement:hover .editorRemoveListElement {
+    display: inline-block;
+    position: absolute;
+    top: 0;
+    right: 3px;
+    font-weight: bolder;
+    font-size: 25px;
+    line-height: 15px;
+    cursor: pointer;
+    color: hotpink;
+}
+
+/* .editorListElement:hover .editorRemoveListElement:hover {
+    text-decoration: underline;
+} */

@@ -85,3 +85,23 @@ exports.updateUserBio = (id, bio) => {
     const params = [id, bio];
     return db.query(q, params);
 };
+
+exports.upsertUserProfile = (
+    id,
+    birthday,
+    gender,
+    seeking,
+    interests,
+    symptoms,
+    about
+) => {
+    const q = `
+        INSERT INTO user_profiles (user_id, birthday, gender, seeking, interests, symptoms, about)
+        VALUES ($1, $2, $3, $4, $5, $6, $7)
+        ON CONFLICT (user_id)
+        DO UPDATE SET birthday=$2, gender=$3, seeking=$4, interests=$5, symptoms=$6, about=$7
+        RETURNING *
+    `;
+    const params = [id, birthday, gender, seeking, interests, symptoms, about];
+    return db.query(q, params);
+};

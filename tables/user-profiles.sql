@@ -1,6 +1,6 @@
-DROP TABLE IF EXISTS profiles;
+DROP TABLE IF EXISTS user_profiles;
 
-CREATE TABLE profiles(
+CREATE TABLE user_profiles(
     id SERIAL PRIMARY KEY,
     user_id INTEGER NOT NULL UNIQUE REFERENCES users(id),
     birthday date NOT NULL,
@@ -9,4 +9,4 @@ CREATE TABLE profiles(
     interests VARCHAR(255)[],
     symptoms VARCHAR(255)[],
     about TEXT
-)
+);
