@@ -1,6 +1,7 @@
 import React from "react";
 import axios from "./axios";
 import List from "./profile-editor-list";
+import moment from "moment";
 
 export default class ProfileEditor extends React.Component {
     constructor(props) {
@@ -17,6 +18,9 @@ export default class ProfileEditor extends React.Component {
         this.setState({
             [target.name]: target.value
         });
+    }
+    convertDateToAge(birthday) {
+        return moment().diff(moment(birthday), "years");
     }
     addElement(array, arrayName, elementId) {
         const element = document.getElementById(elementId);
@@ -50,7 +54,7 @@ export default class ProfileEditor extends React.Component {
             seeking: this.props.seeking,
             interests: this.props.interests || [],
             symptoms: this.props.symptoms || [],
-            about: this.props.about
+            about: this.props.about || ""
         });
         console.log("current state: ", this.state);
     }
@@ -63,7 +67,7 @@ export default class ProfileEditor extends React.Component {
                 if (data.success) {
                     console.log("Profile updated successfully: ", data);
                     this.props.setProfile(data.updatedProfile);
-                    this.setState({ beingEdited: false });
+                    this.setState({ beingEdited: false, error: false });
                 } else {
                     console.log("Error updating profile");
                     this.setState({ error: true });
@@ -75,17 +79,23 @@ export default class ProfileEditor extends React.Component {
             // display form for editing profile
             return (
                 <div className="editProfile">
-                    <label htmlFor="birthday">Date of birth</label>
-                    <br />
+                    <p className="label" style={{ margin: 0 }}>
+                        Date of birth:{" "}
+                        <span>{this.state.birthday || "None selected"}</span>
+                    </p>
+                    <label className="label" id="date" htmlFor="birthday">
+                        Edit:
+                    </label>
                     <input
                         type="date"
                         name="birthday"
                         id="birthday"
+                        max="2003-01-01"
                         onChange={e => this.handleChange(e)}
                     />
                     <br />
                     <div onChange={e => this.handleChange(e)}>
-                        <p>Gender:</p>
+                        <p className="label">Gender:</p>
                         <label htmlFor="male">Male</label>
                         <input
                             type="radio"
@@ -112,7 +122,7 @@ export default class ProfileEditor extends React.Component {
                         />
                     </div>
                     <div onChange={e => this.handleChange(e)}>
-                        <p>Interested in:</p>
+                        <p className="label">Interested in:</p>
                         <label htmlFor="males">Males</label>
                         <input
                             type="radio"
@@ -138,7 +148,7 @@ export default class ProfileEditor extends React.Component {
                             checked={this.state.seeking == "others"}
                         />
                     </div>
-                    <p>Interests:</p>
+                    <p className="label">Interests:</p>
                     <div>
                         <List
                             elements={this.state.interests}
@@ -169,7 +179,7 @@ export default class ProfileEditor extends React.Component {
                         Add
                     </button>
                     <br />
-                    <p>Current symptoms:</p>
+                    <p className="label">Current symptoms:</p>
                     <div>
                         <List
                             elements={this.state.symptoms}
@@ -209,7 +219,7 @@ export default class ProfileEditor extends React.Component {
                         Add
                     </button>
                     <br />
-                    <p>About Me:</p>
+                    <p className="label">About Me:</p>
                     <textarea
                         name="about"
                         value={this.state.about}
@@ -218,7 +228,9 @@ export default class ProfileEditor extends React.Component {
                     <br />
                     <button onClick={() => this.updateProfile()}>Save</button>
                     <button
-                        onClick={() => this.setState({ beingEdited: false })}
+                        onClick={() =>
+                            this.setState({ beingEdited: false, error: false })
+                        }
                     >
                         Cancel
                     </button>
@@ -228,13 +240,15 @@ export default class ProfileEditor extends React.Component {
             // display current profile
             return (
                 <div>
-                    <h3>{this.props.about}</h3>
-                    <h3>Date of birth: {this.props.birthday}</h3>
+                    <h3>Age: {this.convertDateToAge(this.props.birthday)}</h3>
+                    <br />
+                    <h3>Gender: {this.props.gender}</h3>
+                    <h3>Interested in: {this.props.seeking}</h3>
                     <h3>
-                        {this.props.gender} seeking {this.props.seeking}
+                        Interests and hobbies: {this.props.interests.join(", ")}
                     </h3>
-                    <h3>Interests: {this.props.interests}</h3>
-                    <h3>Current symptoms: {this.props.symptoms}</h3>
+                    <h3>Current symptoms: {this.props.symptoms.join(", ")}</h3>
+                    <h3>{this.props.about}</h3>
                     <button onClick={() => this.editProfile()}>
                         Edit profile
                     </button>

@@ -85,6 +85,7 @@ export default class App extends React.Component {
                     <Profile
                         first={this.state.first}
                         last={this.state.last}
+                        birthday={this.state.birthday}
                         profilePic={
                             <ProfilePic
                                 first={this.state.first}

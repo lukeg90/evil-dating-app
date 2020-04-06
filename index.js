@@ -269,7 +269,7 @@ app.post("/user/image", uploader.single("image"), s3.upload, (req, res) => {
 
 app.post("/user/profile/update", async (req, res) => {
     console.log("profile data from frontend: ", req.body.profile);
-    const {
+    let {
         birthday,
         gender,
         seeking,
@@ -296,20 +296,6 @@ app.post("/user/profile/update", async (req, res) => {
         console.log("Error updating user profile: ", err);
         res.json({ success: false });
     }
-    // try {
-    //     const { rows } = await db.updateUserBio(
-    //         req.session.userId,
-    //         req.body.bio
-    //     );
-    //     console.log("Successfully updated user bio: ", rows[0].bio);
-    //     res.json({
-    //         success: true,
-    //         bio: rows[0].bio
-    //     });
-    // } catch (err) {
-    //     console.log("Error updating user bio", err);
-    //     res.json({ success: false });
-    // }
 });
 
 // ensure that if the user is logged out, the url is  /welcome
