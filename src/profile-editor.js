@@ -241,6 +241,7 @@ export default class ProfileEditor extends React.Component {
             return (
                 <div>
                     <h3>Age: {this.convertDateToAge(this.props.birthday)}</h3>
+                    <h3>{this.props.about}</h3>
                     <br />
                     <h3>Gender: {this.props.gender}</h3>
                     <h3>Interested in: {this.props.seeking}</h3>
@@ -248,7 +249,6 @@ export default class ProfileEditor extends React.Component {
                         Interests and hobbies: {this.props.interests.join(", ")}
                     </h3>
                     <h3>Current symptoms: {this.props.symptoms.join(", ")}</h3>
-                    <h3>{this.props.about}</h3>
                     <button onClick={() => this.editProfile()}>
                         Edit profile
                     </button>

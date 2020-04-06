@@ -4,6 +4,8 @@ import Profile from "./profile";
 import ProfilePic from "./profile-pic";
 import ProfileEditor from "./profile-editor";
 import Uploader from "./uploader";
+import OtherProfile from "./other-profile";
+import { BrowserRouter, Route } from "react-router-dom";
 
 export default class App extends React.Component {
     constructor(props) {
@@ -21,7 +23,7 @@ export default class App extends React.Component {
                     data.imgUrl = "/default.png";
                 }
                 this.setState(data);
-                // check a required field to see if profile has been updated
+                // check a required field to fsee if profile has been updated
                 if (data.birthday) {
                     this.setState({ profileUpdated: true });
                 }
@@ -73,7 +75,7 @@ export default class App extends React.Component {
         return (
             <React.Fragment>
                 <header>
-                    <img className="nav-logo" src="corona-love.png" />
+                    <img className="nav-logo" src="/corona-love.png" />
                     <img
                         className="nav-profile-pic"
                         src={this.state.imgUrl}
@@ -81,34 +83,55 @@ export default class App extends React.Component {
                         onClick={() => this.showUploader()}
                     />
                 </header>
-                <div className="profile">
-                    <Profile
-                        first={this.state.first}
-                        last={this.state.last}
-                        birthday={this.state.birthday}
-                        profilePic={
-                            <ProfilePic
-                                first={this.state.first}
-                                imgUrl={this.state.imgUrl}
-                                showUploader={() => this.showUploader()}
-                            />
-                        }
-                        profileEditor={
-                            <ProfileEditor
-                                profileUpdated={this.state.profileUpdated}
-                                birthday={this.state.birthday}
-                                gender={this.state.gender}
-                                seeking={this.state.seeking}
-                                interests={this.state.interests}
-                                symptoms={this.state.symptoms}
-                                about={this.state.about}
-                                setProfile={userData =>
-                                    this.setProfile(userData)
-                                }
-                            />
-                        }
-                    />
-                </div>
+                <BrowserRouter>
+                    <div className="profile">
+                        <Route
+                            exact
+                            path="/"
+                            render={() => (
+                                <Profile
+                                    first={this.state.first}
+                                    last={this.state.last}
+                                    profilePic={
+                                        <ProfilePic
+                                            first={this.state.first}
+                                            imgUrl={this.state.imgUrl}
+                                            showUploader={() =>
+                                                this.showUploader()
+                                            }
+                                        />
+                                    }
+                                    profileEditor={
+                                        <ProfileEditor
+                                            profileUpdated={
+                                                this.state.profileUpdated
+                                            }
+                                            birthday={this.state.birthday}
+                                            gender={this.state.gender}
+                                            seeking={this.state.seeking}
+                                            interests={this.state.interests}
+                                            symptoms={this.state.symptoms}
+                                            about={this.state.about}
+                                            setProfile={userData =>
+                                                this.setProfile(userData)
+                                            }
+                                        />
+                                    }
+                                />
+                            )}
+                        />
+                        <Route
+                            path="/user/:id"
+                            render={props => (
+                                <OtherProfile
+                                    key={props.match.url}
+                                    match={props.match}
+                                    history={props.history}
+                                />
+                            )}
+                        />
+                    </div>
+                </BrowserRouter>
                 {this.state.showUploader && (
                     <Uploader
                         setProfilePic={url => this.setProfilePic(url)}

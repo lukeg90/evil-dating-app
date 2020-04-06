@@ -298,6 +298,34 @@ app.post("/user/profile/update", async (req, res) => {
     }
 });
 
+app.get("/user/:id.json", async (req, res) => {
+    try {
+        const { rows } = await db.getUserById(req.params.id);
+        console.log("successfully fetched other profile: ", rows[0]);
+        const {
+            first,
+            last,
+            image_url,
+            birthday,
+            gender,
+            seeking,
+            interests
+        } = rows[0];
+        res.json({
+            success: true,
+            first: first,
+            last: last,
+            imgUrl: image_url,
+            birthday: birthday,
+            gender: gender,
+            seeking: seeking,
+            interests: interests
+        });
+    } catch (err) {
+        console.log("Error fetching other user profile: ", err);
+        res.json({ success: false });
+    }
+});
 // ensure that if the user is logged out, the url is  /welcome
 app.get("*", function(req, res) {
     if (req.session.userId) {
