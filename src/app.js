@@ -9,7 +9,8 @@ export default class App extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            showUploader: false
+            showUploader: false,
+            profileUpdated: false
         };
     }
     componentDidMount() {
@@ -20,7 +21,11 @@ export default class App extends React.Component {
                     data.imgUrl = "/default.png";
                 }
                 this.setState(data);
-                console.log("Current user: ", this.state.first);
+                // check a required field to see if profile has been updated
+                if (data.birthday) {
+                    this.setState({ profileUpdated: true });
+                }
+                console.log("Current user data: ", this.state);
             })
             .catch(err => {
                 console.log("Error fetching user data: ", err);
@@ -44,9 +49,25 @@ export default class App extends React.Component {
             this.state.imgUrl
         );
     }
-    setProfile(userData) {
-        this.setState({ profile: userData });
-        console.log("bio updated in App: ", this.state.bio);
+    setProfile(updatedProfile) {
+        const {
+            birthday,
+            gender,
+            seeking,
+            interests,
+            symptoms,
+            about
+        } = updatedProfile;
+        this.setState({
+            profileUpdated: true,
+            birthday: birthday,
+            gender: gender,
+            seeking: seeking,
+            interests: interests,
+            symptoms: symptoms,
+            about: about
+        });
+        console.log("Profile updated in App: ", this.state);
     }
     render() {
         return (
@@ -73,7 +94,13 @@ export default class App extends React.Component {
                         }
                         profileEditor={
                             <ProfileEditor
-                                profile={this.state.profile}
+                                profileUpdated={this.state.profileUpdated}
+                                birthday={this.state.birthday}
+                                gender={this.state.gender}
+                                seeking={this.state.seeking}
+                                interests={this.state.interests}
+                                symptoms={this.state.symptoms}
+                                about={this.state.about}
                                 setProfile={userData =>
                                     this.setProfile(userData)
                                 }

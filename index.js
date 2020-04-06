@@ -235,7 +235,12 @@ app.get("/user", (req, res) => {
                 first: rows[0].first,
                 last: rows[0].last,
                 imgUrl: rows[0].image_url,
-                bio: rows[0].bio
+                birthday: rows[0].birthday,
+                gender: rows[0].gender,
+                seeking: rows[0].seeking,
+                interests: rows[0].interests,
+                symptoms: rows[0].symptoms,
+                about: rows[0].about
             });
         })
         .catch(err => {
@@ -283,8 +288,13 @@ app.post("/user/profile/update", async (req, res) => {
             about
         );
         console.log("User profile successfully updated: ", rows);
+        res.json({
+            success: true,
+            updatedProfile: rows[0]
+        });
     } catch (err) {
         console.log("Error updating user profile: ", err);
+        res.json({ success: false });
     }
     // try {
     //     const { rows } = await db.updateUserBio(

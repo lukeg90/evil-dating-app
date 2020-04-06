@@ -27,8 +27,10 @@ exports.getUserByEmail = email => {
 
 exports.getUserById = id => {
     const q = `
-        SELECT id, first, last, image_url FROM users
-        WHERE id = $1
+        SELECT users.id, first, last, image_url, birthday, gender, seeking, interests, symptoms, about FROM users
+        LEFT JOIN user_profiles
+        ON user_profiles.user_id = users.id
+        WHERE users.id = $1
     `;
     const params = [id];
     return db.query(q, params);

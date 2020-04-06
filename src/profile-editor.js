@@ -8,12 +8,8 @@ export default class ProfileEditor extends React.Component {
         // internal state needs to update after all inputs but database and app state is only updated after clicking save
         this.state = {
             beingEdited: false,
-            birthday: "",
-            gender: "",
-            seeking: "",
             interests: [],
-            symptoms: [],
-            about: ""
+            symptoms: []
         };
     }
     handleChange({ target }) {
@@ -33,7 +29,6 @@ export default class ProfileEditor extends React.Component {
             });
             element.value = "";
         }
-        console.log("Current state: ", this.state.interests);
     }
     removeElement(e, array, stateProp) {
         console.log(
@@ -50,8 +45,14 @@ export default class ProfileEditor extends React.Component {
     editProfile() {
         this.setState({
             beingEdited: true,
-            updatedProfile: this.props.profile
+            birthday: this.props.birthday,
+            gender: this.props.gender,
+            seeking: this.props.seeking,
+            interests: this.props.interests || [],
+            symptoms: this.props.symptoms || [],
+            about: this.props.about
         });
+        console.log("current state: ", this.state);
     }
     updateProfile() {
         axios
@@ -61,7 +62,7 @@ export default class ProfileEditor extends React.Component {
             .then(({ data }) => {
                 if (data.success) {
                     console.log("Profile updated successfully: ", data);
-                    this.props.setProfile(data);
+                    this.props.setProfile(data.updatedProfile);
                     this.setState({ beingEdited: false });
                 } else {
                     console.log("Error updating profile");
@@ -81,7 +82,6 @@ export default class ProfileEditor extends React.Component {
                         name="birthday"
                         id="birthday"
                         onChange={e => this.handleChange(e)}
-                        required
                     />
                     <br />
                     <div onChange={e => this.handleChange(e)}>
@@ -92,6 +92,7 @@ export default class ProfileEditor extends React.Component {
                             name="gender"
                             id="male"
                             value="male"
+                            checked={this.state.gender == "male"}
                         />
                         <label htmlFor="female">Female</label>
                         <input
@@ -99,6 +100,7 @@ export default class ProfileEditor extends React.Component {
                             name="gender"
                             id="female"
                             value="female"
+                            checked={this.state.gender == "female"}
                         />
                         <label htmlFor="other">Other</label>
                         <input
@@ -106,6 +108,7 @@ export default class ProfileEditor extends React.Component {
                             name="gender"
                             id="other"
                             value="other"
+                            checked={this.state.gender == "other"}
                         />
                     </div>
                     <div onChange={e => this.handleChange(e)}>
@@ -116,6 +119,7 @@ export default class ProfileEditor extends React.Component {
                             name="seeking"
                             id="males"
                             value="males"
+                            checked={this.state.seeking == "males"}
                         />
                         <label htmlFor="females">Females</label>
                         <input
@@ -123,6 +127,7 @@ export default class ProfileEditor extends React.Component {
                             name="seeking"
                             id="females"
                             value="females"
+                            checked={this.state.seeking == "females"}
                         />
                         <label htmlFor="others">Others</label>
                         <input
@@ -130,6 +135,7 @@ export default class ProfileEditor extends React.Component {
                             name="seeking"
                             id="others"
                             value="others"
+                            checked={this.state.seeking == "others"}
                         />
                     </div>
                     <p>Interests:</p>
@@ -218,11 +224,17 @@ export default class ProfileEditor extends React.Component {
                     </button>
                 </div>
             );
-        } else if (this.props.profile) {
+        } else if (this.props.profileUpdated) {
             // display current profile
             return (
                 <div>
-                    {/* profile here */}
+                    <h3>{this.props.about}</h3>
+                    <h3>Date of birth: {this.props.birthday}</h3>
+                    <h3>
+                        {this.props.gender} seeking {this.props.seeking}
+                    </h3>
+                    <h3>Interests: {this.props.interests}</h3>
+                    <h3>Current symptoms: {this.props.symptoms}</h3>
                     <button onClick={() => this.editProfile()}>
                         Edit profile
                     </button>
