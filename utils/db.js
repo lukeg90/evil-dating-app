@@ -107,3 +107,22 @@ exports.upsertUserProfile = (
     const params = [id, birthday, gender, seeking, interests, symptoms, about];
     return db.query(q, params);
 };
+
+exports.getRecentUsers = () => {
+    const q = `
+        SELECT id, first, image_url FROM users
+        ORDER BY id DESC
+        LIMIT 3
+    `;
+    return db.query(q);
+};
+
+exports.getUsersByQuery = query => {
+    const q = `
+        SELECT id, first, image_url FROM users
+        WHERE first ILIKE $1
+        ORDER BY id DESC
+    `;
+    const params = [query + "%"];
+    return db.query(q, params);
+};

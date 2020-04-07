@@ -73,7 +73,7 @@ test("When the mock request is successful, the function that was passed as a pro
         <ProfileEditor
             interests={[]}
             symptoms={[]}
-            setProfile={() => myMockSetProfile()}
+            setProfile={myMockSetProfile}
         />
     );
 

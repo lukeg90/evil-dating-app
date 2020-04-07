@@ -221,3 +221,19 @@ option {
 /* .editorListElement:hover .editorRemoveListElement:hover {
     text-decoration: underline;
 } */
+
+.userCard {
+    display: flex;
+    margin: 20px 0 20px 0;
+    text-decoration: none;
+}
+
+.userCard img {
+    height: 100px;
+    width: 100px;
+    object-fit: cover;
+}
+
+.userCard h3 {
+    margin-left: 20px;
+}

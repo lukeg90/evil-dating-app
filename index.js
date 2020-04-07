@@ -326,6 +326,33 @@ app.get("/user/:id.json", async (req, res) => {
         res.json({ success: false });
     }
 });
+
+app.get("/users/recent", async (req, res) => {
+    try {
+        const { rows } = await db.getRecentUsers();
+        console.log("Recent users: ", rows);
+        res.json({
+            success: true,
+            users: rows
+        });
+    } catch (err) {
+        console.log("Error getting recent users: ", err);
+        res.json({ success: false });
+    }
+});
+
+app.get("/users/:query", async (req, res) => {
+    try {
+        const { rows } = await db.getUsersByQuery(req.params.query);
+        console.log("user data from db: ", rows);
+        res.json({
+            success: true,
+            users: rows
+        });
+    } catch (err) {
+        console.log("Error searching users");
+    }
+});
 // ensure that if the user is logged out, the url is  /welcome
 app.get("*", function(req, res) {
     if (req.session.userId) {

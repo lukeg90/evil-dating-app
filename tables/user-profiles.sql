@@ -1,4 +1,4 @@
-DROP TABLE IF EXISTS user_profiles;
+DROP TABLE IF EXISTS user_profiles CASCADE;
 
 CREATE TABLE user_profiles(
     id SERIAL PRIMARY KEY,
