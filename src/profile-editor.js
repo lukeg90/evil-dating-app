@@ -52,9 +52,9 @@ export default class ProfileEditor extends React.Component {
             birthday: this.props.birthday,
             gender: this.props.gender,
             seeking: this.props.seeking,
-            interests: this.props.interests || [],
-            symptoms: this.props.symptoms || [],
-            about: this.props.about || ""
+            interests: this.props.interests,
+            symptoms: this.props.symptoms,
+            about: this.props.about
         });
         console.log("current state: ", this.state);
     }
@@ -226,7 +226,9 @@ export default class ProfileEditor extends React.Component {
                         onChange={e => this.handleChange(e)}
                     />
                     <br />
-                    <button onClick={() => this.updateProfile()}>Save</button>
+                    <button id="save" onClick={() => this.updateProfile()}>
+                        Save
+                    </button>
                     <button
                         onClick={() =>
                             this.setState({ beingEdited: false, error: false })

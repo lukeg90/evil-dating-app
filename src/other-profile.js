@@ -30,7 +30,7 @@ export default class OtherProfile extends React.Component {
                     {
                         first: first,
                         last: last,
-                        imgUrl: imgUrl,
+                        imgUrl: imgUrl || "/default.png",
                         birthday: birthday,
                         gender: gender,
                         seeking: seeking,

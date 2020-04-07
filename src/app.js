@@ -109,9 +109,11 @@ export default class App extends React.Component {
                                             birthday={this.state.birthday}
                                             gender={this.state.gender}
                                             seeking={this.state.seeking}
-                                            interests={this.state.interests}
-                                            symptoms={this.state.symptoms}
-                                            about={this.state.about}
+                                            interests={
+                                                this.state.interests || []
+                                            }
+                                            symptoms={this.state.symptoms || []}
+                                            about={this.state.about || ""}
                                             setProfile={userData =>
                                                 this.setProfile(userData)
                                             }
