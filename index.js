@@ -327,30 +327,27 @@ app.get("/user/:id.json", async (req, res) => {
     }
 });
 
-app.get("/users/recent", async (req, res) => {
-    try {
-        const { rows } = await db.getRecentUsers();
-        console.log("Recent users: ", rows);
-        res.json({
-            success: true,
-            users: rows
-        });
-    } catch (err) {
-        console.log("Error getting recent users: ", err);
-        res.json({ success: false });
-    }
-});
-
-app.get("/users/:query", async (req, res) => {
-    try {
-        const { rows } = await db.getUsersByQuery(req.params.query);
-        console.log("user data from db: ", rows);
-        res.json({
-            success: true,
-            users: rows
-        });
-    } catch (err) {
-        console.log("Error searching users");
+app.get("/users/list", async (req, res) => {
+    console.log("Query: ", req.query.q);
+    if (!req.query.q) {
+        try {
+            const { rows } = await db.getRecentUsers();
+            console.log("Recent users from db: ", rows);
+            res.json({ success: true, users: rows });
+        } catch (err) {
+            console.log("Error getting recent users");
+        }
+    } else {
+        try {
+            const { rows } = await db.getUsersByQuery(req.query.q);
+            console.log("user search data from db: ", rows);
+            res.json({
+                success: true,
+                users: rows
+            });
+        } catch (err) {
+            console.log("Error searching users");
+        }
     }
 });
 // ensure that if the user is logged out, the url is  /welcome

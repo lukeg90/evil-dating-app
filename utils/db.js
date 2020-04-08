@@ -121,7 +121,7 @@ exports.getUsersByQuery = query => {
     const q = `
         SELECT id, first, image_url FROM users
         WHERE first ILIKE $1
-        ORDER BY id DESC
+        ORDER BY first ASC
     `;
     const params = [query + "%"];
     return db.query(q, params);

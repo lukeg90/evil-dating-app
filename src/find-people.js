@@ -6,34 +6,18 @@ export default function FindPeople() {
     const [users, setUsers] = useState([]);
     const [query, setQuery] = useState("");
     const [error, setError] = useState(false);
-    const [showRecent, setShowRecent] = useState(true);
-
-    useEffect(() => {
-        axios.get("/users/recent").then(({ data }) => {
-            if (data.success) {
-                setUsers(data.users);
-                setError(false);
-            } else {
-                console.log("Error getting recent users");
-                setError(true);
-            }
-        });
-    }, []);
 
     useEffect(() => {
         let ignore = false;
-        axios.get(`/users/${query}`).then(({ data }) => {
+        axios.get(`/users/list?q=${query}`).then(({ data }) => {
             if (data.success) {
                 if (!ignore) {
                     setUsers(data.users);
                 }
                 setError(false);
-                if (showRecent) {
-                    setShowRecent(false);
-                }
                 console.log("response received from server");
-            } else if (query) {
-                console.log("error getting users by query");
+            } else {
+                console.log("error getting users from server");
                 setError(true);
             }
         });
@@ -49,7 +33,7 @@ export default function FindPeople() {
         <React.Fragment>
             {error && <div className="error">Oops, there was an error</div>}
             <h1>Find people</h1>
-            {showRecent && (
+            {!query && (
                 <div className="recentUsers">
                     <h2>Most recent users:</h2>
                     <PeopleList users={users} />
