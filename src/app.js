@@ -6,7 +6,7 @@ import ProfileEditor from "./profile-editor";
 import Uploader from "./uploader";
 import OtherProfile from "./other-profile";
 import FindPeople from "./find-people";
-import { BrowserRouter, Route } from "react-router-dom";
+import { BrowserRouter, Route, Link } from "react-router-dom";
 
 export default class App extends React.Component {
     constructor(props) {
@@ -72,19 +72,39 @@ export default class App extends React.Component {
         });
         console.log("Profile updated in App: ", this.state);
     }
+    logout() {
+        axios.get("/logout").then(() => {
+            window.location.reload();
+            console.log("logged out");
+        });
+    }
     render() {
         return (
             <React.Fragment>
-                <header>
-                    <img className="nav-logo" src="/corona-love.png" />
-                    <img
-                        className="nav-profile-pic"
-                        src={this.state.imgUrl}
-                        alt={this.state.first}
-                        onClick={() => this.showUploader()}
-                    />
-                </header>
                 <BrowserRouter>
+                    <header>
+                        <img className="nav-logo" src="/corona-love.png" />
+                        <div className="navbar">
+                            <Link to="/">
+                                <h3 className="nav-link">Profile</h3>
+                            </Link>
+                            <Link to="/users">
+                                <h3 className="nav-link">People</h3>
+                            </Link>
+                            <h3
+                                className="nav-link"
+                                onClick={() => this.logout()}
+                            >
+                                Logout
+                            </h3>
+                            <img
+                                className="nav-profile-pic"
+                                src={this.state.imgUrl}
+                                alt={this.state.first}
+                                onClick={() => this.showUploader()}
+                            />
+                        </div>
+                    </header>
                     <Route path="/users" component={FindPeople} />
                     <div className="profile">
                         <Route

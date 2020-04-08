@@ -57,7 +57,11 @@ export default class OtherProfile extends React.Component {
                 />
                 <div className="bio">
                     <h1 className="bioName">{this.state.first}</h1>
-                    <h3>Age: {this.convertDateToAge(this.state.birthday)}</h3>
+                    {this.state.birthday && (
+                        <h3>
+                            Age: {this.convertDateToAge(this.state.birthday)}
+                        </h3>
+                    )}
                     <h3>{this.state.about}</h3>
                     <br />
                     <h3>Gender: {this.state.gender}</h3>

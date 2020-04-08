@@ -39,11 +39,25 @@ body {
     object-fit: cover;
 }
 
+.navbar {
+    display: flex;
+    float: right;
+}
+
+.nav-link {
+    display: inline-block;
+    cursor: pointer;
+    margin-right: 30px;
+}
+
+.nav-link:hover {
+    color: slategray;
+}
+
 .nav-profile-pic {
     object-fit: cover;
     height: 80px;
     width: 80px;
-    float: right;
     border: 3px solid white;
     border-radius: 5px;
     cursor: pointer;
