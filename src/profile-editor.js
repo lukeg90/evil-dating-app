@@ -67,7 +67,11 @@ export default class ProfileEditor extends React.Component {
                 if (data.success) {
                     console.log("Profile updated successfully: ", data);
                     this.props.setProfile(data.updatedProfile);
-                    this.setState({ beingEdited: false, error: false });
+                    // every time profile is successfully updated, suggested matches table needs to also be updated
+                    this.setState({
+                        beingEdited: false,
+                        error: false
+                    });
                 } else {
                     console.log("Error updating profile");
                     this.setState({ error: true });
@@ -241,16 +245,28 @@ export default class ProfileEditor extends React.Component {
         } else if (this.props.profileUpdated) {
             // display current profile
             return (
-                <div>
+                <div className="updatedProfile">
                     <h3>Age: {this.convertDateToAge(this.props.birthday)}</h3>
                     <h3>{this.props.about}</h3>
                     <br />
                     <h3>Gender: {this.props.gender}</h3>
-                    <h3>Interested in: {this.props.seeking}</h3>
+                    <h3>Looking for: {this.props.seeking}</h3>
                     <h3>
-                        Interests and hobbies: {this.props.interests.join(", ")}
+                        Interests:{" "}
+                        {this.props.interests.length > 0 ? (
+                            <span>{this.props.interests.join(", ")}</span>
+                        ) : (
+                            <span>none selected</span>
+                        )}
                     </h3>
-                    <h3>Current symptoms: {this.props.symptoms.join(", ")}</h3>
+                    <h3>
+                        Current symptoms:{" "}
+                        {this.props.symptoms.length > 0 ? (
+                            <span>{this.props.symptoms.join(", ")}</span>
+                        ) : (
+                            <span>none</span>
+                        )}
+                    </h3>
                     <button onClick={() => this.editProfile()}>
                         Edit profile
                     </button>

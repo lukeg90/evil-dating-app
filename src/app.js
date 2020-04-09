@@ -5,7 +5,7 @@ import ProfilePic from "./profile-pic";
 import ProfileEditor from "./profile-editor";
 import Uploader from "./uploader";
 import OtherProfile from "./other-profile";
-import FindPeople from "./find-people";
+import SuggestedMatches from "./suggested-matches";
 import { BrowserRouter, Route, Link } from "react-router-dom";
 
 export default class App extends React.Component {
@@ -71,6 +71,15 @@ export default class App extends React.Component {
             about: about
         });
         console.log("Profile updated in App: ", this.state);
+        // every time profile is updated, suggested matches table also needs to be updated
+        this.setMatches();
+    }
+    setMatches() {
+        axios.get("matches/suggested", {
+            params: {
+                user: this.state
+            }
+        });
     }
     logout() {
         axios.get("/logout").then(() => {
@@ -88,8 +97,8 @@ export default class App extends React.Component {
                             <Link to="/">
                                 <h3 className="nav-link">Profile</h3>
                             </Link>
-                            <Link to="/users">
-                                <h3 className="nav-link">People</h3>
+                            <Link to="/matches/suggested">
+                                <h3 className="nav-link">Find matches</h3>
                             </Link>
                             <h3
                                 className="nav-link"
@@ -105,7 +114,10 @@ export default class App extends React.Component {
                             />
                         </div>
                     </header>
-                    <Route path="/users" component={FindPeople} />
+                    <Route
+                        path="/matches/suggested"
+                        component={SuggestedMatches}
+                    />
                     <div className="profile">
                         <Route
                             exact

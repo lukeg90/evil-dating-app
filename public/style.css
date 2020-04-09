@@ -153,8 +153,7 @@ input[type="file"] {
 
 .profile-pic {
     height: 300px;
-    width: 300px;
-    object-fit: cover;
+    object-fit: contain;
     border: 2px solid white;
     border-radius: 5px;
     cursor: pointer;
@@ -250,4 +249,9 @@ option {
 
 .userCard h3 {
     margin-left: 20px;
+}
+
+.friendButton {
+    display: block;
+    width: 250px;
 }

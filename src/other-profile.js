@@ -1,6 +1,7 @@
 import React from "react";
 import axios from "./axios";
 import moment from "moment";
+import FriendButton from "./friend-buton";
 
 export default class OtherProfile extends React.Component {
     constructor(props) {
@@ -17,6 +18,7 @@ export default class OtherProfile extends React.Component {
             if (data.success) {
                 console.log("Successfully fetched other user data: ", data);
                 const {
+                    id,
                     first,
                     last,
                     imgUrl,
@@ -28,6 +30,7 @@ export default class OtherProfile extends React.Component {
                 } = data;
                 this.setState(
                     {
+                        id: id,
                         first: first,
                         last: last,
                         imgUrl: imgUrl || "/default.png",
@@ -50,11 +53,14 @@ export default class OtherProfile extends React.Component {
     render() {
         return (
             <React.Fragment>
-                <img
-                    className="profile-pic"
-                    src={this.state.imgUrl}
-                    alt={this.state.first}
-                />
+                <div>
+                    <img
+                        className="profile-pic"
+                        src={this.state.imgUrl}
+                        alt={this.state.first}
+                    />
+                    <FriendButton otherUserId={this.props.match.params.id} />
+                </div>
                 <div className="bio">
                     <h1 className="bioName">{this.state.first}</h1>
                     {this.state.birthday && (
@@ -64,11 +70,11 @@ export default class OtherProfile extends React.Component {
                     )}
                     <h3>{this.state.about}</h3>
                     <br />
-                    <h3>Gender: {this.state.gender}</h3>
-                    <h3>Interested in: {this.state.seeking}</h3>
-                    <h3>
-                        Interests and hobbies: {this.state.interests.join(", ")}
-                    </h3>
+                    <h3>Gender {this.state.gender}</h3>
+                    <h3>Looking for {this.state.seeking}</h3>
+                    {this.state.interests > 0 && (
+                        <h3>I like {this.state.interests.join(", ")}</h3>
+                    )}
                 </div>
             </React.Fragment>
         );

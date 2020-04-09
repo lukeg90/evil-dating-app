@@ -2,17 +2,17 @@ import React, { useState, useEffect } from "react";
 import axios from "./axios";
 import PeopleList from "./people-list";
 
-export default function FindPeople() {
-    const [users, setUsers] = useState([]);
+export default function SuggestedMatches() {
+    const [matches, setMatches] = useState([]);
     const [query, setQuery] = useState("");
     const [error, setError] = useState(false);
 
     useEffect(() => {
         let ignore = false;
-        axios.get(`/users/list?q=${query}`).then(({ data }) => {
+        axios.get(`/matches/list?q=${query}`).then(({ data }) => {
             if (data.success) {
                 if (!ignore) {
-                    setUsers(data.users);
+                    setMatches(data.users);
                 }
                 setError(false);
                 console.log("response received from server");
@@ -36,7 +36,7 @@ export default function FindPeople() {
             {!query && (
                 <div className="recentUsers">
                     <h2>Most recent users:</h2>
-                    <PeopleList users={users} />
+                    <PeopleList users={matches} />
                     <h2>Are you looking for someone in particular?</h2>
                 </div>
             )}
@@ -48,10 +48,22 @@ export default function FindPeople() {
             />
             {query && (
                 <div className="matchingUsers">
-                    <PeopleList users={users} />
+                    <PeopleList users={matches} />
                 </div>
             )}
-            {users.length == 0 && <h2>No results</h2>}
+            {matches.length == 0 && <h2>No results</h2>}
         </React.Fragment>
     );
 }
+
+//// NEXT STEPS ///////
+
+//// Convert people to suggested matches ////
+// Refactor FindPeople so it only displays suggested matches
+// Suggested matches criteria
+// Gender matches seeking of user
+// Age matches user inputted age range
+// Check for one common interest
+// Only match if symptoms are unbalanced
+
+// matches should be kept in state of app

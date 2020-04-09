@@ -303,6 +303,7 @@ app.get("/user/:id.json", async (req, res) => {
         const { rows } = await db.getUserById(req.params.id);
         console.log("successfully fetched other profile: ", rows[0]);
         const {
+            id,
             first,
             last,
             image_url,
@@ -313,6 +314,7 @@ app.get("/user/:id.json", async (req, res) => {
         } = rows[0];
         res.json({
             success: true,
+            id: id,
             first: first,
             last: last,
             imgUrl: image_url,
@@ -327,7 +329,7 @@ app.get("/user/:id.json", async (req, res) => {
     }
 });
 
-app.get("/users/list", async (req, res) => {
+app.get("/matches/list", async (req, res) => {
     console.log("Query: ", req.query.q);
     if (!req.query.q) {
         try {
@@ -348,6 +350,67 @@ app.get("/users/list", async (req, res) => {
         } catch (err) {
             console.log("Error searching users");
         }
+    }
+});
+
+app.get("/initial-friendship-status/:otherUserId", async (req, res) => {
+    console.log("other user ID: ", req.params.otherUserId);
+    try {
+        const { rows } = await db.getFriendshipStatus(
+            req.session.userId,
+            req.params.otherUserId
+        );
+        console.log("Friendship status: ", rows);
+        if (rows[0].accepted) {
+            res.json({ success: true, accepted: true });
+        } else if (
+            !rows[0].accepted &&
+            rows[0].sender_id == req.params.otherUserId
+        ) {
+            res.json({ success: true, awaitingUserAction: true });
+        } else if (
+            !rows[0].accepted &&
+            rows[0].sender_id == req.session.userId
+        ) {
+            res.json({ success: true, awaitingOtherAction: true });
+        } else {
+            res.json({ success: false });
+        }
+    } catch (err) {
+        console.log("Error determining friendship status: ", err);
+    }
+});
+
+app.post("/make-friend-request/:otherUserId", async (req, res) => {
+    try {
+        await db.initializeFriendship(
+            req.session.userId,
+            req.params.otherUserId
+        );
+        res.json({ success: true });
+    } catch (err) {
+        console.log("Error initializing friendship: ", err);
+        res.json({ success: false });
+    }
+});
+
+app.post("/add-friendship/:otherUserId", async (req, res) => {
+    try {
+        await db.acceptFriendship(req.session.userId, req.params.otherUserId);
+        res.json({ success: true });
+    } catch (err) {
+        console.log("Error accepting friend request");
+        res.json({ success: false });
+    }
+});
+
+app.post("/end-friendship/:otherUserId", async (req, res) => {
+    try {
+        await db.endFriendship(req.session.userId, req.params.otherUserId);
+        res.json({ success: true });
+    } catch (err) {
+        console.log("Error ending friendship", err);
+        res.json({ success: false });
     }
 });
 // ensure that if the user is logged out, the url is  /welcome

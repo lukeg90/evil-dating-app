@@ -77,17 +77,6 @@ exports.addImage = (id, image) => {
     return db.query(q, params);
 };
 
-exports.updateUserBio = (id, bio) => {
-    const q = `
-        UPDATE users
-        SET bio = $2
-        WHERE id = $1
-        RETURNING bio
-    `;
-    const params = [id, bio];
-    return db.query(q, params);
-};
-
 exports.upsertUserProfile = (
     id,
     birthday,
@@ -124,5 +113,44 @@ exports.getUsersByQuery = query => {
         ORDER BY first ASC
     `;
     const params = [query + "%"];
+    return db.query(q, params);
+};
+
+exports.getFriendshipStatus = (userId, otherId) => {
+    const q = `
+        SELECT * FROM friendships 
+        WHERE (receiver_id = $1 AND sender_id = $2)
+        OR (receiver_id = $2 AND sender_id = $1);
+    `;
+    const params = [userId, otherId];
+    return db.query(q, params);
+};
+
+exports.initializeFriendship = (userId, otherId) => {
+    const q = `
+        INSERT INTO friendships (sender_id, receiver_id)
+        VALUES ($1, $2)
+    `;
+    const params = [userId, otherId];
+    return db.query(q, params);
+};
+
+exports.acceptFriendship = (userId, otherId) => {
+    const q = `
+        UPDATE friendships
+        SET accepted = true
+        WHERE (receiver_id = $1 AND sender_id = $2)
+    `;
+    const params = [userId, otherId];
+    return db.query(q, params);
+};
+
+exports.endFriendship = (userId, otherId) => {
+    const q = `
+        DELETE FROM friendships
+        WHERE (receiver_id = $1 AND sender_id = $2)
+        OR (receiver_id = $2 AND sender_id = $1);
+    `;
+    const params = [userId, otherId];
     return db.query(q, params);
 };
