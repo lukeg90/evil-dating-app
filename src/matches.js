@@ -2,14 +2,15 @@ import React, { useState, useEffect } from "react";
 import axios from "./axios";
 import PeopleList from "./people-list";
 
-export default function SuggestedMatches() {
+export default function Matches() {
     const [matches, setMatches] = useState([]);
     const [query, setQuery] = useState("");
     const [error, setError] = useState(false);
 
     useEffect(() => {
         let ignore = false;
-        axios.get(`/matches/list?q=${query}`).then(({ data }) => {
+        // instead of getting all users, request should return a list of matches if user has added their profile
+        axios.get(`/matches.json?q=${query}`).then(({ data }) => {
             if (data.success) {
                 if (!ignore) {
                     setMatches(data.users);
@@ -32,7 +33,13 @@ export default function SuggestedMatches() {
     return (
         <React.Fragment>
             {error && <div className="error">Oops, there was an error</div>}
-            <h1>Find people</h1>
+            <h1>Search matches</h1>
+            <input
+                type="text"
+                name="name"
+                placeholder="Enter name"
+                onChange={handleChange}
+            />
             {!query && (
                 <div className="recentUsers">
                     <h2>Most recent users:</h2>
@@ -40,12 +47,6 @@ export default function SuggestedMatches() {
                     <h2>Are you looking for someone in particular?</h2>
                 </div>
             )}
-            <input
-                type="text"
-                name="name"
-                placeholder="Enter name"
-                onChange={handleChange}
-            />
             {query && (
                 <div className="matchingUsers">
                     <PeopleList users={matches} />
@@ -55,15 +56,3 @@ export default function SuggestedMatches() {
         </React.Fragment>
     );
 }
-
-//// NEXT STEPS ///////
-
-//// Convert people to suggested matches ////
-// Refactor FindPeople so it only displays suggested matches
-// Suggested matches criteria
-// Gender matches seeking of user
-// Age matches user inputted age range
-// Check for one common interest
-// Only match if symptoms are unbalanced
-
-// matches should be kept in state of app

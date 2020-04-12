@@ -154,3 +154,12 @@ exports.endFriendship = (userId, otherId) => {
     const params = [userId, otherId];
     return db.query(q, params);
 };
+
+exports.getAllUsers = () => {
+    const q = `
+        SELECT * FROM users
+        JOIN user_profiles
+        ON user_profiles.user_id = users.id
+    `;
+    return db.query(q);
+};

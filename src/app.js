@@ -5,7 +5,7 @@ import ProfilePic from "./profile-pic";
 import ProfileEditor from "./profile-editor";
 import Uploader from "./uploader";
 import OtherProfile from "./other-profile";
-import SuggestedMatches from "./suggested-matches";
+import Matches from "./matches";
 import { BrowserRouter, Route, Link } from "react-router-dom";
 
 export default class App extends React.Component {
@@ -24,7 +24,7 @@ export default class App extends React.Component {
                     data.imgUrl = "/default.png";
                 }
                 this.setState(data);
-                // check a required field to fsee if profile has been updated
+                // check a required field to fsee if profile has been added
                 if (data.birthday) {
                     this.setState({ profileUpdated: true });
                 }
@@ -71,15 +71,6 @@ export default class App extends React.Component {
             about: about
         });
         console.log("Profile updated in App: ", this.state);
-        // every time profile is updated, suggested matches table also needs to be updated
-        this.setMatches();
-    }
-    setMatches() {
-        axios.get("matches/suggested", {
-            params: {
-                user: this.state
-            }
-        });
     }
     logout() {
         axios.get("/logout").then(() => {
@@ -97,7 +88,7 @@ export default class App extends React.Component {
                             <Link to="/">
                                 <h3 className="nav-link">Profile</h3>
                             </Link>
-                            <Link to="/matches/suggested">
+                            <Link to="/matches">
                                 <h3 className="nav-link">Find matches</h3>
                             </Link>
                             <h3
@@ -115,8 +106,12 @@ export default class App extends React.Component {
                         </div>
                     </header>
                     <Route
-                        path="/matches/suggested"
-                        component={SuggestedMatches}
+                        path="/matches"
+                        render={() => (
+                            <Matches
+                                profileUpdated={this.state.profileUpdated}
+                            />
+                        )}
                     />
                     <div className="profile">
                         <Route

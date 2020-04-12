@@ -12,6 +12,7 @@ const uidSafe = require("uid-safe");
 const path = require("path");
 const s3 = require("./utils/s3");
 const conf = require("./config");
+const { match } = require("./services");
 
 let secrets;
 if (process.env.NODE_ENV == "production") {
@@ -329,28 +330,37 @@ app.get("/user/:id.json", async (req, res) => {
     }
 });
 
-app.get("/matches/list", async (req, res) => {
+app.get("/matches.json", (req, res) => {
     console.log("Query: ", req.query.q);
-    if (!req.query.q) {
-        try {
-            const { rows } = await db.getRecentUsers();
-            console.log("Recent users from db: ", rows);
-            res.json({ success: true, users: rows });
-        } catch (err) {
-            console.log("Error getting recent users");
-        }
-    } else {
-        try {
-            const { rows } = await db.getUsersByQuery(req.query.q);
-            console.log("user search data from db: ", rows);
-            res.json({
-                success: true,
-                users: rows
-            });
-        } catch (err) {
-            console.log("Error searching users");
-        }
-    }
+    // first get current user and all users
+    let loggedInUser;
+    let allUsers;
+    db.getUserById(req.session.userId)
+        .then(({ rows }) => {
+            loggedInUser = rows[0];
+            // only gets users who have added a profile
+            return db.getAllUsers();
+        })
+        .then(({ rows }) => {
+            allUsers = rows;
+            // match-making logic here
+            const matches = match(loggedInUser, allUsers);
+            console.log("Matches: ", matches);
+            if (!req.query.q) {
+                res.json({ success: true, users: matches });
+            } else {
+                const queryMatches = matches.filter(match =>
+                    match.first
+                        .toLowerCase()
+                        .startsWith(req.query.q.toLowerCase())
+                );
+                res.json({ success: true, users: queryMatches });
+            }
+        })
+        .catch(err => {
+            console.log("error getting matches: ", err);
+            res.json({ success: false });
+        });
 });
 
 app.get("/initial-friendship-status/:otherUserId", async (req, res) => {
@@ -412,6 +422,10 @@ app.post("/end-friendship/:otherUserId", async (req, res) => {
         console.log("Error ending friendship", err);
         res.json({ success: false });
     }
+});
+
+app.get("/matches/suggested.json", (req, res) => {
+    console.log("Matches for user: ", req.query.user);
 });
 // ensure that if the user is logged out, the url is  /welcome
 app.get("*", function(req, res) {

@@ -14,6 +14,8 @@ export default class OtherProfile extends React.Component {
         console.log("Other user profile mounted");
         const id = this.props.match.params.id;
         console.log("id: ", id);
+        // should fetch user from list of matches, not from list of all users
+        // logged in user should only be able to access profiles of suggested matches
         axios.get(`/user/${id}.json`).then(({ data }) => {
             if (data.success) {
                 console.log("Successfully fetched other user data: ", data);
