@@ -371,7 +371,9 @@ app.get("/initial-friendship-status/:otherUserId", async (req, res) => {
             req.params.otherUserId
         );
         console.log("Friendship status: ", rows);
-        if (rows[0].accepted) {
+        if (!rows[0]) {
+            res.json({ success: false });
+        } else if (rows[0].accepted) {
             res.json({ success: true, accepted: true });
         } else if (
             !rows[0].accepted &&

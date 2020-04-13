@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "./axios";
 import PeopleList from "./people-list";
 
-export default function Matches() {
+export default function Matches({ authorize }) {
     const [matches, setMatches] = useState([]);
     const [query, setQuery] = useState("");
     const [error, setError] = useState(false);
@@ -33,23 +33,21 @@ export default function Matches() {
     return (
         <React.Fragment>
             {error && <div className="error">Oops, there was an error</div>}
-            <h1>Search matches</h1>
             <input
                 type="text"
                 name="name"
-                placeholder="Enter name"
+                placeholder="Search your matches"
                 onChange={handleChange}
             />
             {!query && (
                 <div className="recentUsers">
-                    <h2>Most recent users:</h2>
-                    <PeopleList users={matches} />
-                    <h2>Are you looking for someone in particular?</h2>
+                    <h2>Your matches:</h2>
+                    <PeopleList users={matches} authorize={() => authorize()} />
                 </div>
             )}
             {query && (
                 <div className="matchingUsers">
-                    <PeopleList users={matches} />
+                    <PeopleList users={matches} authorize={() => authorize()} />
                 </div>
             )}
             {matches.length == 0 && <h2>No results</h2>}

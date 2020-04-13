@@ -6,14 +6,15 @@ import ProfileEditor from "./profile-editor";
 import Uploader from "./uploader";
 import OtherProfile from "./other-profile";
 import Matches from "./matches";
-import { BrowserRouter, Route, Link } from "react-router-dom";
+import { BrowserRouter, Route, Link, Redirect } from "react-router-dom";
 
 export default class App extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             showUploader: false,
-            profileUpdated: false
+            profileUpdated: false,
+            userIsMatch: false
         };
     }
     componentDidMount() {
@@ -78,6 +79,10 @@ export default class App extends React.Component {
             console.log("logged out");
         });
     }
+    authorize() {
+        this.setState({ userIsMatch: true });
+        console.log("authorized: ", this.state.userIsMatch);
+    }
     render() {
         return (
             <React.Fragment>
@@ -89,7 +94,7 @@ export default class App extends React.Component {
                                 <h3 className="nav-link">Profile</h3>
                             </Link>
                             <Link to="/matches">
-                                <h3 className="nav-link">Find matches</h3>
+                                <h3 className="nav-link">Matches</h3>
                             </Link>
                             <h3
                                 className="nav-link"
@@ -110,6 +115,7 @@ export default class App extends React.Component {
                         render={() => (
                             <Matches
                                 profileUpdated={this.state.profileUpdated}
+                                authorize={() => this.authorize()}
                             />
                         )}
                     />
@@ -154,13 +160,17 @@ export default class App extends React.Component {
                         <Route
                             exact
                             path="/user/:id"
-                            render={props => (
-                                <OtherProfile
-                                    key={props.match.url}
-                                    match={props.match}
-                                    history={props.history}
-                                />
-                            )}
+                            render={props =>
+                                this.state.userIsMatch ? (
+                                    <OtherProfile
+                                        key={props.match.url}
+                                        match={props.match}
+                                        history={props.history}
+                                    />
+                                ) : (
+                                    <Redirect to="/" />
+                                )
+                            }
                         />
                     </div>
                 </BrowserRouter>

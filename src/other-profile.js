@@ -72,8 +72,6 @@ export default class OtherProfile extends React.Component {
                     )}
                     <h3>{this.state.about}</h3>
                     <br />
-                    <h3>Gender {this.state.gender}</h3>
-                    <h3>Looking for {this.state.seeking}</h3>
                     {this.state.interests > 0 && (
                         <h3>I like {this.state.interests.join(", ")}</h3>
                     )}
