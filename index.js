@@ -311,7 +311,8 @@ app.get("/user/:id.json", async (req, res) => {
             birthday,
             gender,
             seeking,
-            interests
+            interests,
+            about
         } = rows[0];
         res.json({
             success: true,
@@ -322,7 +323,8 @@ app.get("/user/:id.json", async (req, res) => {
             birthday: birthday,
             gender: gender,
             seeking: seeking,
-            interests: interests
+            interests: interests,
+            about: about
         });
     } catch (err) {
         console.log("Error fetching other user profile: ", err);

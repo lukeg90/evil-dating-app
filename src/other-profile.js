@@ -72,7 +72,7 @@ export default class OtherProfile extends React.Component {
                     )}
                     <h3>{this.state.about}</h3>
                     <br />
-                    {this.state.interests > 0 && (
+                    {this.state.interests.length > 0 && (
                         <h3>I like {this.state.interests.join(", ")}</h3>
                     )}
                 </div>

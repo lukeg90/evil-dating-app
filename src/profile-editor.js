@@ -34,6 +34,7 @@ export default class ProfileEditor extends React.Component {
             element.value = "";
         }
     }
+    // NEED TO FIX
     removeElement(e, array, stateProp) {
         console.log(
             "remove elment event: ",
