@@ -2,16 +2,27 @@ import React from "react";
 import ReactDOM from "react-dom";
 import Welcome from "./welcome";
 import App from "./app";
+import { createStore, applyMiddleware } from "redux";
+import reduxPromise from "redux-promise";
+import { composeWithDevTools } from "redux-devtools-extension";
+import reducer from "./reducer.js";
+import { Provider } from "react-redux";
+
+const store = createStore(
+    reducer,
+    composeWithDevTools(applyMiddleware(reduxPromise))
+);
 
 let elem;
-
-console.log(location.pathname);
 
 if (location.pathname == "/welcome") {
     elem = <Welcome />;
 } else {
-    // elem = <img className="nav-logo" src="corona-love.png"></img>;
-    elem = <App />;
+    elem = (
+        <Provider store={store}>
+            <App />
+        </Provider>
+    );
 }
 
 ReactDOM.render(elem, document.querySelector("main"));

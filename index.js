@@ -428,8 +428,14 @@ app.post("/end-friendship/:otherUserId", async (req, res) => {
     }
 });
 
-app.get("/matches/suggested.json", (req, res) => {
-    console.log("Matches for user: ", req.query.user);
+app.get("/connections-wannabes", async (req, res) => {
+    try {
+        const { rows } = await db.getConnectionsWannabes(req.session.userId);
+        console.log("Connections and wannabes: ", rows);
+        res.json({ success: true, connectionsWannabes: rows });
+    } catch (err) {
+        console.log("unable to get connections and wannabes from db: ", err);
+    }
 });
 // ensure that if the user is logged out, the url is  /welcome
 app.get("*", function(req, res) {

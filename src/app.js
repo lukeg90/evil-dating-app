@@ -6,6 +6,7 @@ import ProfileEditor from "./profile-editor";
 import Uploader from "./uploader";
 import OtherProfile from "./other-profile";
 import Matches from "./matches";
+import Connections from "./connections";
 import { BrowserRouter, Route, Link, Redirect } from "react-router-dom";
 
 export default class App extends React.Component {
@@ -96,6 +97,9 @@ export default class App extends React.Component {
                             <Link to="/matches">
                                 <h3 className="nav-link">Matches</h3>
                             </Link>
+                            <Link to="/friends">
+                                <h3 className="nav-link">Friends</h3>
+                            </Link>
                             <h3
                                 className="nav-link"
                                 onClick={() => this.logout()}
@@ -173,6 +177,11 @@ export default class App extends React.Component {
                             }
                         />
                     </div>
+                    <Route
+                        exact
+                        path="/connections"
+                        render={() => <Connections />}
+                    />
                 </BrowserRouter>
                 {this.state.showUploader && (
                     <Uploader

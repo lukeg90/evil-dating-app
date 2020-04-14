@@ -1,6 +1,10 @@
-export function addBio() {
+import axios from "./axios";
+
+export async function receiveConnectionsWannabes() {
+    const { data } = await axios.get("/connections-wannabes");
+    console.log("Connections: ", data);
     return {
-        type: "ADD_BIO",
-        bio: "my new bio"
+        type: "RECEIVE_CONNECTIONS_WANNABES",
+        connectionsWannabes: data.connectionsWannabes
     };
 }
