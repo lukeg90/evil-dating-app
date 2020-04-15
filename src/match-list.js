@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-export default function PeopleList({ users, authorize }) {
+export default function MatchList({ users, authorize }) {
     const userList = users.map(user => (
         <Link
             className="userCard"

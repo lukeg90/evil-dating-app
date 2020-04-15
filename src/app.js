@@ -97,8 +97,8 @@ export default class App extends React.Component {
                             <Link to="/matches">
                                 <h3 className="nav-link">Matches</h3>
                             </Link>
-                            <Link to="/friends">
-                                <h3 className="nav-link">Friends</h3>
+                            <Link to="/connections">
+                                <h3 className="nav-link">Connections</h3>
                             </Link>
                             <h3
                                 className="nav-link"
@@ -117,10 +117,7 @@ export default class App extends React.Component {
                     <Route
                         path="/matches"
                         render={() => (
-                            <Matches
-                                profileUpdated={this.state.profileUpdated}
-                                authorize={() => this.authorize()}
-                            />
+                            <Matches authorize={() => this.authorize()} />
                         )}
                     />
                     <div className="profile">
@@ -180,7 +177,9 @@ export default class App extends React.Component {
                     <Route
                         exact
                         path="/connections"
-                        render={() => <Connections />}
+                        render={() => (
+                            <Connections authorize={() => this.authorize()} />
+                        )}
                     />
                 </BrowserRouter>
                 {this.state.showUploader && (

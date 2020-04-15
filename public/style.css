@@ -244,6 +244,8 @@ option {
 .userCard img {
     height: 100px;
     width: 100px;
+    border: 2px solid white;
+    border-radius: 5px;
     object-fit: cover;
 }
 

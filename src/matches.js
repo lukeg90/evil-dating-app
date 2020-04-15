@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import axios from "./axios";
-import PeopleList from "./people-list";
+import MatchList from "./match-list";
+
+// ONLY SHOW MATCHES NOT ALREADY IN CONNECTIONS
 
 export default function Matches({ authorize }) {
     const [matches, setMatches] = useState([]);
@@ -42,12 +44,12 @@ export default function Matches({ authorize }) {
             {!query && (
                 <div className="recentUsers">
                     <h2>Your matches:</h2>
-                    <PeopleList users={matches} authorize={() => authorize()} />
+                    <MatchList users={matches} authorize={() => authorize()} />
                 </div>
             )}
             {query && (
                 <div className="matchingUsers">
-                    <PeopleList users={matches} authorize={() => authorize()} />
+                    <MatchList users={matches} authorize={() => authorize()} />
                 </div>
             )}
             {matches.length == 0 && <h2>No results</h2>}
