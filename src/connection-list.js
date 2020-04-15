@@ -6,7 +6,10 @@ export default function ConnectionList({
     users,
     authorize,
     buttonText,
-    handleClick
+    otherButtonText,
+    handleAccept,
+    handleReject,
+    handleRemove
 }) {
     const dispatch = useDispatch();
     const userList = users.map(user => (
@@ -20,9 +23,20 @@ export default function ConnectionList({
             </Link>
             <div className="cardText">
                 <h3>{user.first}</h3>
-                <button onClick={() => dispatch(handleClick(user.id))}>
-                    {buttonText}
-                </button>
+                {otherButtonText ? (
+                    <React.Fragment>
+                        <button onClick={() => dispatch(handleAccept(user.id))}>
+                            {buttonText}
+                        </button>
+                        <button onClick={() => dispatch(handleReject(user.id))}>
+                            {otherButtonText}
+                        </button>
+                    </React.Fragment>
+                ) : (
+                    <button onClick={() => dispatch(handleRemove(user.id))}>
+                        {buttonText}
+                    </button>
+                )}
             </div>
         </div>
     ));

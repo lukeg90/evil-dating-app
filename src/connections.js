@@ -37,7 +37,9 @@ export default function Connections({ authorize }) {
                         users={wannabes}
                         authorize={() => authorize()}
                         buttonText={"Accept"}
-                        handleClick={acceptFriendRequest}
+                        otherButtonText={"Reject"}
+                        handleAccept={acceptFriendRequest}
+                        handleReject={unfriend}
                     />
                 </div>
             ) : (
@@ -50,7 +52,7 @@ export default function Connections({ authorize }) {
                         users={connections}
                         authorize={() => authorize()}
                         buttonText={"Remove"}
-                        handleClick={unfriend}
+                        handleRemove={unfriend}
                     />
                 </div>
             ) : (

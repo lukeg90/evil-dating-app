@@ -30,3 +30,13 @@ export async function unfriend(id) {
         };
     }
 }
+
+export async function rejectConnectionRequest(id) {
+    const { data } = await axios.post(`/end-friendship/${id}`);
+    if (data.success) {
+        return {
+            type: "REJECT_FRIEND_REQUEST",
+            id
+        };
+    }
+}

@@ -260,12 +260,13 @@ option {
 
 .connections {
     display: flex;
-    justify-content: space-evenly;
+    flex-wrap: wrap;
 }
 
 .connectionCard {
     display: flex;
     align-items: center;
+    margin-right: 50px;
 }
 
 .cardText {
