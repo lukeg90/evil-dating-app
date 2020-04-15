@@ -8,8 +8,6 @@ export async function receiveConnectionsWannabes() {
             type: "RECEIVE_CONNECTIONS_WANNABES",
             connectionsWannabes: data.connectionsWannabes
         };
-    } else {
-        console.log("Error requesting connections from server");
     }
 }
 
@@ -20,14 +18,12 @@ export async function acceptFriendRequest(id) {
             type: "ACCEPT_FRIEND_REQUEST",
             id
         };
-    } else {
-        console.log("Error in accept friend request action");
     }
 }
 
 export async function unfriend(id) {
     const { data } = await axios.post(`/end-friendship/${id}`);
-    if (data.succes) {
+    if (data.success) {
         return {
             type: "UNFRIEND",
             id

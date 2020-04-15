@@ -18,10 +18,12 @@ export default function ConnectionList({
             >
                 <img src={user.image_url} />
             </Link>
-            <h3>{user.first}</h3>
-            <button onClick={dispatch(handleClick(user.id))}>
-                {buttonText}
-            </button>
+            <div className="cardText">
+                <h3>{user.first}</h3>
+                <button onClick={() => dispatch(handleClick(user.id))}>
+                    {buttonText}
+                </button>
+            </div>
         </div>
     ));
     return <React.Fragment>{userList}</React.Fragment>;

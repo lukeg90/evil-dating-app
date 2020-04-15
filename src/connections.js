@@ -1,5 +1,4 @@
 import React, { useEffect } from "react";
-import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {
     receiveConnectionsWannabes,
@@ -33,11 +32,11 @@ export default function Connections({ authorize }) {
         <React.Fragment>
             <h2>People who want to connect with you:</h2>
             {wannabes && wannabes.length > 0 ? (
-                <div className="wannabes">
+                <div className="connections">
                     <ConnectionList
                         users={wannabes}
                         authorize={() => authorize()}
-                        buttonText={"Accept connection"}
+                        buttonText={"Accept"}
                         handleClick={acceptFriendRequest}
                     />
                 </div>
@@ -50,7 +49,7 @@ export default function Connections({ authorize }) {
                     <ConnectionList
                         users={connections}
                         authorize={() => authorize()}
-                        buttonText={"Remove connection"}
+                        buttonText={"Remove"}
                         handleClick={unfriend}
                     />
                 </div>

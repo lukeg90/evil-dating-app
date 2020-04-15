@@ -257,3 +257,27 @@ option {
     display: block;
     width: 250px;
 }
+
+.connections {
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.connectionCard {
+    display: flex;
+    align-items: center;
+}
+
+.cardText {
+    margin-left: 20px;
+}
+
+.cardText h3 {
+    margin-bottom: 0;
+}
+
+.cardText button {
+    width: 75px;
+    height: 30px;
+    font-size: 15px;
+}
