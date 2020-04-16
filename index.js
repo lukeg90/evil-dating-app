@@ -466,7 +466,7 @@ io.on("connection", async function(socket) {
     // need a new table for our chats
     // db query should be a JOIN.
     const { rows } = await db.getLastTenMessages();
-    console.log("Last 10 messages reversed: ", rows.reverse());
+    rows.reverse();
     io.emit("chatMessages", rows);
 
     // ADDING A NEW MSG
