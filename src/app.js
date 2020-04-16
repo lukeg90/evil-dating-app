@@ -7,6 +7,7 @@ import Uploader from "./uploader";
 import OtherProfile from "./other-profile";
 import Matches from "./matches";
 import Connections from "./connections";
+import Chat from "./chat";
 import { BrowserRouter, Route, Link, Redirect } from "react-router-dom";
 
 export default class App extends React.Component {
@@ -100,6 +101,9 @@ export default class App extends React.Component {
                             <Link to="/connections">
                                 <h3 className="nav-link">Connections</h3>
                             </Link>
+                            <Link to="/chat">
+                                <h3 className="nav-link">Chat</h3>
+                            </Link>
                             <h3
                                 className="nav-link"
                                 onClick={() => this.logout()}
@@ -181,6 +185,7 @@ export default class App extends React.Component {
                             <Connections authorize={() => this.authorize()} />
                         )}
                     />
+                    <Route exact path="/chat" render={() => <Chat />} />
                 </BrowserRouter>
                 {this.state.showUploader && (
                     <Uploader

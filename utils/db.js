@@ -176,3 +176,37 @@ exports.getConnectionsWannabes = userId => {
     const params = [userId];
     return db.query(q, params);
 };
+
+exports.getLastTenMessages = () => {
+    const q = `
+        SELECT chat_messages.id, message, sent_at, first, image_url, user_id
+        FROM chat_messages
+        JOIN users
+        ON users.id = chat_messages.user_id
+        ORDER BY sent_at DESC
+        LIMIT 10
+    `;
+    return db.query(q);
+};
+
+exports.addMessage = (msg, userId) => {
+    const q = `
+        INSERT INTO chat_messages (message, user_id)
+        VALUES ($1, $2)
+        RETURNING id
+    `;
+    const params = [msg, userId];
+    return db.query(q, params);
+};
+
+exports.getMessageById = msgId => {
+    const q = `
+        SELECT chat_messages.id, message, sent_at, first, image_url, user_id
+        FROM chat_messages
+        JOIN users
+        ON users.id = chat_messages.user_id
+        WHERE chat_messages.id = $1
+    `;
+    const params = [msgId];
+    return db.query(q, params);
+};

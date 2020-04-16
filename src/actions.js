@@ -30,3 +30,17 @@ export async function unfriend(id) {
         };
     }
 }
+
+export function chatMessages(msgs) {
+    return {
+        type: "RECEIVE_CHAT_MESSAGES",
+        msgs
+    };
+}
+
+export function addChatMessage(msg) {
+    return {
+        type: "ADD_CHAT_MESSAGE",
+        msg
+    };
+}

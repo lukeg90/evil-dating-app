@@ -1,5 +1,4 @@
 import React from "react";
-import { Link } from "react";
 
 export default function List({ elements, removeElement }) {
     const listItems = elements.map((element, index) => (

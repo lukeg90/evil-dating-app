@@ -1,5 +1,7 @@
 const express = require("express");
 const app = express();
+const server = require("http").Server(app);
+const io = require("socket.io")(server, { origins: "localhost:8080" });
 const port = process.env.PORT || 8080;
 const db = require("./utils/db");
 const cookieSession = require("cookie-session");
@@ -58,12 +60,16 @@ app.use(express.json());
 
 app.use(express.static("public"));
 
-app.use(
-    cookieSession({
-        secret: secrets.cookieSecret,
-        maxAge: 1000 * 60 * 60
-    })
-);
+const cookieSessionMiddleware = cookieSession({
+    secret: secrets.cookieSecret,
+    maxAge: 1000 * 60 * 60
+});
+
+app.use(cookieSessionMiddleware);
+
+io.use(function(socket, next) {
+    cookieSessionMiddleware(socket.request, socket.request.res, next);
+});
 
 app.use(csurf());
 
@@ -446,6 +452,48 @@ app.get("*", function(req, res) {
     }
 });
 
-app.listen(port, function() {
+server.listen(port, function() {
     console.log("I'm listening.");
+});
+
+io.on("connection", async function(socket) {
+    console.log(`Socket with the id ${socket.id} is now connected`);
+    const userId = socket.request.session.userId;
+    if (!userId) {
+        return socket.disconnect(true);
+    }
+    // this is a good place to get last 10 messages
+    // need a new table for our chats
+    // db query should be a JOIN.
+    const { rows } = await db.getLastTenMessages();
+    console.log("last 10 messages: ", rows);
+    console.log("Last 10 messages reversed: ", rows.reverse());
+    io.emit("chatMessages", rows.reverse();
+
+    // ADDING A NEW MSG
+
+    socket.on("My amazing new chat message", async newMsg => {
+        console.log("This message is coming from chat.js component: ", newMsg);
+        console.log("user who sent the message: ", userId);
+
+        // do a db query to store the new chat msg into the chat table
+
+        const messageData = await db.addMessage(newMsg, userId);
+        const msgId = messageData.rows[0].id;
+
+        console.log("message id: ", msgId);
+
+        // also do a db query to get info about the user - JOIN
+
+        const userAndMessageData = await db.getMessageById(msgId);
+
+        console.log(
+            "Combined user and message data: ",
+            userAndMessageData.rows[0]
+        );
+
+        // once you have that, you want to EMIT your message obj to EVERYONE so they can see it immediately
+
+        io.emit("addChatMessage", userAndMessageData.rows[0]);
+    });
 });

@@ -8,9 +8,7 @@ export default class ProfileEditor extends React.Component {
         super(props);
         // internal state needs to update after all inputs but database and app state is only updated after clicking save
         this.state = {
-            beingEdited: false,
-            interests: [],
-            symptoms: []
+            beingEdited: false
         };
     }
     handleChange({ target }) {
@@ -18,6 +16,7 @@ export default class ProfileEditor extends React.Component {
         this.setState({
             [target.name]: target.value
         });
+        console.log("new state after change: ", this.state[target.name]);
     }
     convertDateToAge(birthday) {
         return moment().diff(moment(birthday), "years");
@@ -34,7 +33,7 @@ export default class ProfileEditor extends React.Component {
             element.value = "";
         }
     }
-    // NEED TO FIX
+    // NEED TO FIX. somehow it's removing interests from app state as well. Is it because innerHTML is removed?
     removeElement(e, array, stateProp) {
         console.log(
             "remove elment event: ",
@@ -45,7 +44,9 @@ export default class ProfileEditor extends React.Component {
         if (index > -1) {
             array.splice(index, 1);
         }
+        console.log("Array: ", array);
         this.setState({ [stateProp]: array });
+        console.log("state after remove: ", this.state[stateProp]);
     }
     editProfile() {
         this.setState({
@@ -58,6 +59,9 @@ export default class ProfileEditor extends React.Component {
             about: this.props.about
         });
         console.log("current state: ", this.state);
+    }
+    cancelEdit() {
+        window.location.reload();
     }
     updateProfile() {
         axios
@@ -234,13 +238,7 @@ export default class ProfileEditor extends React.Component {
                     <button id="save" onClick={() => this.updateProfile()}>
                         Save
                     </button>
-                    <button
-                        onClick={() =>
-                            this.setState({ beingEdited: false, error: false })
-                        }
-                    >
-                        Cancel
-                    </button>
+                    <button onClick={() => this.cancelEdit()}>Cancel</button>
                 </div>
             );
         } else if (this.props.profileUpdated) {
