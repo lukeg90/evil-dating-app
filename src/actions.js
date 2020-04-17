@@ -31,16 +31,23 @@ export async function unfriend(id) {
     }
 }
 
-export function chatMessages(msgs) {
+export function privateMessages(msgs) {
     return {
-        type: "RECEIVE_CHAT_MESSAGES",
+        type: "RECEIVE_PRIVATE_MESSAGES",
         msgs
     };
 }
 
-export function addChatMessage(msg) {
-    return {
-        type: "ADD_CHAT_MESSAGE",
-        msg
-    };
-}
+// export function chatMessages(msgs) {
+//     return {
+//         type: "RECEIVE_CHAT_MESSAGES",
+//         msgs
+//     };
+// }
+
+// export function addChatMessage(msg) {
+//     return {
+//         type: "ADD_CHAT_MESSAGE",
+//         msg
+//     };
+// }

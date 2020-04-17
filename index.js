@@ -505,6 +505,7 @@ io.on("connection", async function(socket) {
             socketId => socketId.id != socket.id
         );
         socketIds = remainingSocketIds;
+        console.log("open sockets: ", socketIds);
     });
 
     // this is a good place to get last 10 messages
@@ -514,7 +515,11 @@ io.on("connection", async function(socket) {
     // rows.reverse();
     // io.emit("chatMessages", rows);
 
-    // // ADDING A NEW MSG
+    // // ADDING A NEW PRIVATE MSG
+
+    socket.on("newPrivateMessage", newPm => {
+        console.log("new private message from chat: ", newPm);
+    });
 
     // socket.on("My amazing new chat message", async newMsg => {
     //     console.log("This message is coming from chat.js component: ", newMsg);
