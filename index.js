@@ -456,43 +456,88 @@ server.listen(port, function() {
     console.log("I'm listening.");
 });
 
+// for private messaging, need to maintain a list of socket ids and the user ids that the sockets belong to
+let socketIds = [];
+
 io.on("connection", async function(socket) {
-    console.log(`Socket with the id ${socket.id} is now connected`);
     const userId = socket.request.session.userId;
+
     if (!userId) {
         return socket.disconnect(true);
     }
+
+    console.log(`Socket with the id ${socket.id} is now connected`);
+
+    // push socket id and user to array of socket ids
+
+    socketIds.push({
+        id: socket.id,
+        userId
+    });
+
+    // get private messages where sender or receiver id = userId
+    try {
+        const privateMessages = await db.getPrivateMessages(userId);
+        console.log("Private messages: ", privateMessages.rows);
+        const socketsToEmitTo = socketIds.filter(
+            socketId => socketId.userId === userId
+        );
+
+        console.log("Sockets to emit to: ", socketsToEmitTo);
+
+        for (let i = 0; i < socketsToEmitTo.length; i++) {
+            io.to(socketsToEmitTo[i].id).emit(
+                "privateMessages",
+                privateMessages.rows
+            );
+        }
+    } catch (err) {
+        console.log("Error getting private messages from db", err);
+    }
+
+    // emit private messages to all sockets of user
+    // check socketIds array to get all socket ids belonging to logged in user
+
+    // on disconnect, remove socket from array of socket ids
+
+    socket.on("disconnect", function() {
+        let remainingSocketIds = socketIds.filter(
+            socketId => socketId.id != socket.id
+        );
+        socketIds = remainingSocketIds;
+    });
+
     // this is a good place to get last 10 messages
     // need a new table for our chats
     // db query should be a JOIN.
-    const { rows } = await db.getLastTenMessages();
-    rows.reverse();
-    io.emit("chatMessages", rows);
+    // const { rows } = await db.getLastTenMessages();
+    // rows.reverse();
+    // io.emit("chatMessages", rows);
 
-    // ADDING A NEW MSG
+    // // ADDING A NEW MSG
 
-    socket.on("My amazing new chat message", async newMsg => {
-        console.log("This message is coming from chat.js component: ", newMsg);
-        console.log("user who sent the message: ", userId);
+    // socket.on("My amazing new chat message", async newMsg => {
+    //     console.log("This message is coming from chat.js component: ", newMsg);
+    //     console.log("user who sent the message: ", userId);
 
-        // do a db query to store the new chat msg into the chat table
+    //     // do a db query to store the new chat msg into the chat table
 
-        const messageData = await db.addMessage(newMsg, userId);
-        const msgId = messageData.rows[0].id;
+    //     const messageData = await db.addMessage(newMsg, userId);
+    //     const msgId = messageData.rows[0].id;
 
-        console.log("message id: ", msgId);
+    //     console.log("message id: ", msgId);
 
-        // also do a db query to get info about the user - JOIN
+    //     // also do a db query to get info about the user - JOIN
 
-        const userAndMessageData = await db.getMessageById(msgId);
+    //     const userAndMessageData = await db.getMessageById(msgId);
 
-        console.log(
-            "Combined user and message data: ",
-            userAndMessageData.rows[0]
-        );
+    //     console.log(
+    //         "Combined user and message data: ",
+    //         userAndMessageData.rows[0]
+    //     );
 
-        // once you have that, you want to EMIT your message obj to EVERYONE so they can see it immediately
+    //     // once you have that, you want to EMIT your message obj to EVERYONE so they can see it immediately
 
-        io.emit("addChatMessage", userAndMessageData.rows[0]);
-    });
+    //     io.emit("addChatMessage", userAndMessageData.rows[0]);
+    // });
 });

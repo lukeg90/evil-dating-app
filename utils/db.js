@@ -210,3 +210,16 @@ exports.getMessageById = msgId => {
     const params = [msgId];
     return db.query(q, params);
 };
+
+exports.getPrivateMessages = userId => {
+    const q = `
+        SELECT private_messages.id, message, sent_at, sender_id, receiver_id, first, image_url
+        FROM private_messages
+        JOIN users
+        ON sender_id = users.id
+        WHERE (sender_id = $1 OR receiver_id = $1)
+        ORDER BY sent_at ASC
+    `;
+    const params = [userId];
+    return db.query(q, params);
+};
