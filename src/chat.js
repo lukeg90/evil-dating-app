@@ -3,7 +3,7 @@ import { socket } from "./socket";
 import { useSelector, useDispatch } from "react-redux";
 import { receiveConnectionsWannabes } from "./actions";
 
-export default function Chat() {
+export default function Chat({ show, setShow }) {
     // want list of all connections to select from
     // after user clicks a connection, chat window should open
     const dispatch = useDispatch();
@@ -30,6 +30,7 @@ export default function Chat() {
     useEffect(() => {
         console.log("dispatching receive action on mount");
         dispatch(receiveConnectionsWannabes());
+        // animate chat container
     }, []);
 
     useEffect(() => {
@@ -50,19 +51,28 @@ export default function Chat() {
         }
     };
 
+    const handleOverlayClick = () => {
+        setShow(false);
+    };
+
     return (
-        <React.Fragment>
-            <h1>Select one of your connections to chat with:</h1>
-            <div className="connections">
+        <div
+            className={`chatOverlay ${show ? "on" : ""}`}
+            onClick={() => handleOverlayClick()}
+        >
+            <div
+                className={`chatConnections ${show ? "animate" : ""}`}
+                onClick={e => e.stopPropagation()}
+            >
                 {connections &&
                     connections.map(connection => (
                         <div
-                            className="userCard"
+                            className="chatConnectionCard"
                             key={connection.id}
                             onClick={() => setSelectedConnection(connection.id)}
                         >
                             <img src={connection.image_url} />
-                            <h4>{connection.first}</h4>
+                            <span>{connection.first}</span>
                         </div>
                     ))}
             </div>
@@ -88,6 +98,6 @@ export default function Chat() {
                     />
                 )}
             </div>
-        </React.Fragment>
+        </div>
     );
 }

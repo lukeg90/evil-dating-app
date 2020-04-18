@@ -284,9 +284,68 @@ option {
     font-size: 15px;
 }
 
+.chatOverlay {
+    position: fixed;
+    height: 100%;
+    width: 100%;
+    top: 0;
+    left: 0;
+    background: rgba(0, 0, 0, 0.5);
+    visibility: hidden;
+}
+
+.on {
+    visibility: visible;
+}
+
+.chatConnections {
+    position: absolute;
+    height: 100%;
+    width: 15%;
+    right: -15%;
+    margin-top: 100px;
+    background: slategray;
+    border-radius: 5px 0 0 5px;
+    transition: 0.7s;
+}
+
+.animate {
+    transition-property: transform;
+    transform: translateX(-100%);
+}
+
+.animateOut {
+    transition-property: transform;
+    transform: translateX(100%);
+}
+
+.chatConnectionCard {
+    width: 100%;
+    padding: 10px;
+}
+
+.chatConnectionCard:hover {
+    cursor: pointer;
+    background: rgba(255, 70, 178, 0.575);
+}
+
+.chatConnectionCard img {
+    height: 50px;
+    width: 50px;
+    object-fit: cover;
+    vertical-align: middle;
+    border-radius: 5px;
+}
+
+.chatConnectionCard span {
+    margin-left: 5px;
+}
+
 .chatMessagesContainer {
-    height: 400px;
-    width: 50%;
+    height: 100%;
+    width: 30%;
+    position: absolute;
+    right: -30%;
     overflow-y: scroll;
 }
 

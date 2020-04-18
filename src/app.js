@@ -15,6 +15,7 @@ export default function App() {
     const [profileUpdated, setProfileUpdated] = useState(false);
     const [userIsMatch, setUserIsMatch] = useState(false);
     const [profile, setProfile] = useState({});
+    const [showChat, setShowChat] = useState(false);
 
     useEffect(() => {
         axios
@@ -85,6 +86,12 @@ export default function App() {
                 <header>
                     <img className="nav-logo" src="/corona-love.png" />
                     <div className="navbar">
+                        <h3
+                            className="nav-link"
+                            onClick={() => setShowChat(true)}
+                        >
+                            Chat
+                        </h3>
                         <Link to="/">
                             <h3 className="nav-link">Profile</h3>
                         </Link>
@@ -93,9 +100,6 @@ export default function App() {
                         </Link>
                         <Link to="/connections">
                             <h3 className="nav-link">Connections</h3>
-                        </Link>
-                        <Link to="/chat">
-                            <h3 className="nav-link">Chat</h3>
                         </Link>
                         <h3 className="nav-link" onClick={() => logout()}>
                             Logout
@@ -108,10 +112,7 @@ export default function App() {
                         />
                     </div>
                 </header>
-                <Route
-                    path="/matches"
-                    render={() => <Matches authorize={() => authorize()} />}
-                />
+                <Chat show={showChat} setShow={() => setShowChat()} />
                 <div className="profile">
                     <Route
                         exact
@@ -163,11 +164,14 @@ export default function App() {
                     />
                 </div>
                 <Route
+                    path="/matches"
+                    render={() => <Matches authorize={() => authorize()} />}
+                />
+                <Route
                     exact
                     path="/connections"
                     render={() => <Connections authorize={() => authorize()} />}
                 />
-                <Route exact path="/chat" render={() => <Chat />} />
             </BrowserRouter>
             {showUploader && (
                 <Uploader
