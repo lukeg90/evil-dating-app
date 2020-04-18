@@ -38,16 +38,9 @@ export function privateMessages(msgs) {
     };
 }
 
-// export function chatMessages(msgs) {
-//     return {
-//         type: "RECEIVE_CHAT_MESSAGES",
-//         msgs
-//     };
-// }
-
-// export function addChatMessage(msg) {
-//     return {
-//         type: "ADD_CHAT_MESSAGE",
-//         msg
-//     };
-// }
+export function addPm(msg) {
+    return {
+        type: "ADD_PM",
+        msg
+    };
+}

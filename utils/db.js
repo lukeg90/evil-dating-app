@@ -177,40 +177,6 @@ exports.getConnectionsWannabes = userId => {
     return db.query(q, params);
 };
 
-exports.getLastTenMessages = () => {
-    const q = `
-        SELECT chat_messages.id, message, sent_at, first, image_url, user_id
-        FROM chat_messages
-        JOIN users
-        ON users.id = chat_messages.user_id
-        ORDER BY sent_at DESC
-        LIMIT 10
-    `;
-    return db.query(q);
-};
-
-exports.addMessage = (msg, userId) => {
-    const q = `
-        INSERT INTO chat_messages (message, user_id)
-        VALUES ($1, $2)
-        RETURNING id
-    `;
-    const params = [msg, userId];
-    return db.query(q, params);
-};
-
-exports.getMessageById = msgId => {
-    const q = `
-        SELECT chat_messages.id, message, sent_at, first, image_url, user_id
-        FROM chat_messages
-        JOIN users
-        ON users.id = chat_messages.user_id
-        WHERE chat_messages.id = $1
-    `;
-    const params = [msgId];
-    return db.query(q, params);
-};
-
 exports.getPrivateMessages = userId => {
     const q = `
         SELECT private_messages.id, message, sent_at, sender_id, receiver_id, first, image_url
@@ -221,5 +187,27 @@ exports.getPrivateMessages = userId => {
         ORDER BY sent_at ASC
     `;
     const params = [userId];
+    return db.query(q, params);
+};
+
+exports.addPrivateMessage = (msg, senderId, receiverId) => {
+    const q = `
+        INSERT INTO private_messages (message, sender_id, receiver_id)
+        VALUES ($1, $2, $3)
+        RETURNING id
+    `;
+    const params = [msg, senderId, receiverId];
+    return db.query(q, params);
+};
+
+exports.getPmById = pmId => {
+    const q = `
+        SELECT private_messages.id, message, sent_at, sender_id, receiver_id, first, image_url
+        FROM private_messages
+        JOIN users
+        ON sender_id = users.id
+        WHERE private_messages.id = $1
+    `;
+    const params = [pmId];
     return db.query(q, params);
 };

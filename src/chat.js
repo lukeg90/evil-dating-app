@@ -5,30 +5,11 @@ import { receiveConnectionsWannabes } from "./actions";
 
 export default function Chat() {
     // want list of all connections to select from
-    // after user clicks a connection, chat window should open up on the right
+    // after user clicks a connection, chat window should open
     const dispatch = useDispatch();
     const elemRef = useRef();
 
     const [selectedConnection, setSelectedConnection] = useState();
-
-    useEffect(() => {
-        console.log("dispatching receive action on mount");
-        dispatch(receiveConnectionsWannabes());
-    }, []);
-
-    useEffect(() => {
-        elemRef.current.scrollTop =
-            elemRef.current.scrollHeight - elemRef.current.clientHeight;
-    }, [privateMessages]);
-
-    const keyCheck = e => {
-        if (e.key == "Enter") {
-            e.preventDefault();
-            console.log("Message: ", e.target.value);
-            socket.emit("newPrivateMessage", e.target.value);
-            e.target.value = "";
-        }
-    };
 
     const connections = useSelector(
         state =>
@@ -45,6 +26,29 @@ export default function Chat() {
                     message.receiver_id === selectedConnection
             )
     );
+
+    useEffect(() => {
+        console.log("dispatching receive action on mount");
+        dispatch(receiveConnectionsWannabes());
+    }, []);
+
+    useEffect(() => {
+        elemRef.current.scrollTop =
+            elemRef.current.scrollHeight - elemRef.current.clientHeight;
+    }, [privateMessages]);
+
+    const keyCheck = e => {
+        if (e.key == "Enter") {
+            e.preventDefault();
+            console.log("Message: ", e.target.value);
+            const dataToEmit = {
+                message: e.target.value,
+                receiver: selectedConnection
+            };
+            socket.emit("newPrivateMessage", dataToEmit);
+            e.target.value = "";
+        }
+    };
 
     return (
         <React.Fragment>
@@ -76,11 +80,13 @@ export default function Chat() {
                             </div>
                         </div>
                     ))}
-                <textarea
-                    className="enterChatMessage"
-                    placeholder="Add your message here"
-                    onKeyDown={e => keyCheck(e)}
-                />
+                {selectedConnection && (
+                    <textarea
+                        className="enterChatMessage"
+                        placeholder="Add your message here"
+                        onKeyDown={e => keyCheck(e)}
+                    />
+                )}
             </div>
         </React.Fragment>
     );

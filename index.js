@@ -456,6 +456,8 @@ server.listen(port, function() {
     console.log("I'm listening.");
 });
 
+////// PRIVATE MESSAGING //////
+
 // for private messaging, need to maintain a list of socket ids and the user ids that the sockets belong to
 let socketIds = [];
 
@@ -508,41 +510,36 @@ io.on("connection", async function(socket) {
         console.log("open sockets: ", socketIds);
     });
 
-    // this is a good place to get last 10 messages
-    // need a new table for our chats
-    // db query should be a JOIN.
-    // const { rows } = await db.getLastTenMessages();
-    // rows.reverse();
-    // io.emit("chatMessages", rows);
-
     // // ADDING A NEW PRIVATE MSG
 
-    socket.on("newPrivateMessage", newPm => {
-        console.log("new private message from chat: ", newPm);
+    socket.on("newPrivateMessage", async data => {
+        console.log("new private message from chat: ", data.message);
+        console.log("receiver of private message: ", data.receiver);
+        console.log("user who sent the message: ", userId);
+
+        // store new private message in database and return its id
+
+        const pmId = await db.addPrivateMessage(
+            data.message,
+            userId,
+            data.receiver
+        );
+        console.log("PM ID: ", pmId.rows[0].id);
+
+        // get message by ID from database and join info about sender
+
+        const pmAndSenderInfo = await db.getPmById(pmId.rows[0].id);
+        const pmToEmit = pmAndSenderInfo.rows[0];
+
+        // emit new private message to all sender and recipient sockets
+
+        socketIds.forEach(socketId => {
+            if (
+                socketId.userId == pmToEmit.sender_id ||
+                socketId.userId == pmToEmit.receiver_id
+            ) {
+                io.to(socketId.id).emit("addPm", pmToEmit);
+            }
+        });
     });
-
-    // socket.on("My amazing new chat message", async newMsg => {
-    //     console.log("This message is coming from chat.js component: ", newMsg);
-    //     console.log("user who sent the message: ", userId);
-
-    //     // do a db query to store the new chat msg into the chat table
-
-    //     const messageData = await db.addMessage(newMsg, userId);
-    //     const msgId = messageData.rows[0].id;
-
-    //     console.log("message id: ", msgId);
-
-    //     // also do a db query to get info about the user - JOIN
-
-    //     const userAndMessageData = await db.getMessageById(msgId);
-
-    //     console.log(
-    //         "Combined user and message data: ",
-    //         userAndMessageData.rows[0]
-    //     );
-
-    //     // once you have that, you want to EMIT your message obj to EVERYONE so they can see it immediately
-
-    //     io.emit("addChatMessage", userAndMessageData.rows[0]);
-    // });
 });

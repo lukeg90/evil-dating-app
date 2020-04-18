@@ -31,16 +31,11 @@ export default function(state = {}, action) {
             privateMessages: action.msgs
         };
     }
-    // if (action.type == "RECEIVE_CHAT_MESSAGES") {
-    //     state = {
-    //         ...state,
-    //         chatMessages: action.msgs
-    //     };
-    // }
-    // if (action.type == "ADD_CHAT_MESSAGE") {
-    //     const chatMessages = [...state.chatMessages, action.msg];
-    //     state = { ...state, chatMessages };
-    // }
+
+    if (action.type == "ADD_PM") {
+        const privateMessages = [...state.privateMessages, action.msg];
+        state = { ...state, privateMessages };
+    }
     console.log("State in reducer: ", state);
     return state;
 }
