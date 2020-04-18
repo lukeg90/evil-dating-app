@@ -235,7 +235,7 @@ app.post("/password/reset/verify", (req, res) => {
 app.get("/user", (req, res) => {
     db.getUserById(req.session.userId)
         .then(({ rows }) => {
-            console.log("uder data: ", rows[0]);
+            console.log("user data: ", rows[0]);
             console.log("Image URL: ", rows[0].image_url);
             res.json({
                 id: rows[0].id,
@@ -354,6 +354,7 @@ app.get("/matches.json", (req, res) => {
             // match-making logic here
             const matches = match(loggedInUser, allUsers);
             console.log("Matches: ", matches);
+            //
             if (!req.query.q) {
                 res.json({ success: true, users: matches });
             } else {
