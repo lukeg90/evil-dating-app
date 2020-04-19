@@ -3,7 +3,7 @@ import { socket } from "./socket";
 import { useSelector, useDispatch } from "react-redux";
 import { receiveConnectionsWannabes } from "./actions";
 
-export default function Chat({ show, setShow }) {
+export default function Chat({ show, setShow, userId }) {
     // want list of all connections to select from
     // after user clicks a connection, chat window should open
     const dispatch = useDispatch();
@@ -30,7 +30,6 @@ export default function Chat({ show, setShow }) {
     useEffect(() => {
         console.log("dispatching receive action on mount");
         dispatch(receiveConnectionsWannabes());
-        // animate chat container
     }, []);
 
     useEffect(() => {
@@ -52,8 +51,24 @@ export default function Chat({ show, setShow }) {
     };
 
     const handleOverlayClick = () => {
-        setShow(false);
+        if (selectedConnection) {
+            setSelectedConnection("");
+        } else {
+            setShow(false);
+        }
     };
+
+    const handleChatConnectionsClick = e => {
+        e.stopPropagation();
+        setSelectedConnection("");
+    };
+
+    const handleChatCardClick = (e, id) => {
+        e.stopPropagation();
+        setSelectedConnection(id);
+    };
+
+    const determineClass = () => {};
 
     return (
         <div
@@ -62,41 +77,63 @@ export default function Chat({ show, setShow }) {
         >
             <div
                 className={`chatConnections ${show ? "animate" : ""}`}
-                onClick={e => e.stopPropagation()}
+                onClick={e => handleChatConnectionsClick(e)}
             >
                 {connections &&
                     connections.map(connection => (
                         <div
                             className="chatConnectionCard"
                             key={connection.id}
-                            onClick={() => setSelectedConnection(connection.id)}
+                            onClick={e => handleChatCardClick(e, connection.id)}
                         >
                             <img src={connection.image_url} />
                             <span>{connection.first}</span>
                         </div>
                     ))}
             </div>
-            <div className="chatMessagesContainer" ref={elemRef}>
-                {privateMessages &&
-                    privateMessages.map(message => (
-                        <div key={message.id} className="chatMessage">
-                            <img src={message.image_url} />
-                            <div className="chatText">
-                                <h4>
-                                    {message.first}{" "}
-                                    <span>{message.sent_at}</span>
-                                </h4>
-                                <p>{message.message}</p>
-                            </div>
-                        </div>
-                    ))}
-                {selectedConnection && (
-                    <textarea
-                        className="enterChatMessage"
-                        placeholder="Add your message here"
-                        onKeyDown={e => keyCheck(e)}
-                    />
-                )}
+            <div
+                className={`chatContainer ${
+                    selectedConnection ? "animate-two" : ""
+                }`}
+                onClick={e => e.stopPropagation()}
+            >
+                <div className="chatMessagesContainer" ref={elemRef}>
+                    {privateMessages &&
+                        privateMessages.map((message, index, array) =>
+                            // return div with date if necessary
+                            index == 0 ||
+                            message.date != array[index - 1].date ? (
+                                <div className="chatDate">
+                                    <p>{message.date}</p>
+                                </div>
+                            ) : (
+                                // return div with chat message if not date
+                                <div
+                                    key={message.id}
+                                    className={`chatMessage ${
+                                        message.sender_id == userId
+                                            ? "myMessage"
+                                            : "theirMessage"
+                                    }`}
+                                >
+                                    {message.receiver_id == userId && (
+                                        <img src={message.image_url} />
+                                    )}
+                                    <div className="chatBubble">
+                                        <p>{message.message}</p>
+                                        <span className="timestamp">
+                                            {message.sent_at}
+                                        </span>
+                                    </div>
+                                </div>
+                            )
+                        )}
+                </div>
+                <textarea
+                    className="enterChatMessage"
+                    placeholder="Add your message here"
+                    onKeyDown={e => keyCheck(e)}
+                />
             </div>
         </div>
     );

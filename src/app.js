@@ -112,7 +112,11 @@ export default function App() {
                         />
                     </div>
                 </header>
-                <Chat show={showChat} setShow={() => setShowChat()} />
+                <Chat
+                    userId={profile.id}
+                    show={showChat}
+                    setShow={() => setShowChat()}
+                />
                 <div className="profile">
                     <Route
                         exact

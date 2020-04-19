@@ -15,6 +15,7 @@ const path = require("path");
 const s3 = require("./utils/s3");
 const conf = require("./config");
 const { match } = require("./services");
+const moment = require("moment");
 
 let secrets;
 if (process.env.NODE_ENV == "production") {
@@ -482,6 +483,12 @@ io.on("connection", async function(socket) {
     try {
         const privateMessages = await db.getPrivateMessages(userId);
         console.log("Private messages: ", privateMessages.rows);
+
+        //format timestamps
+        privateMessages.rows.forEach(row => {
+            row.date = moment(row.sent_at).format("ddd, D MMMM");
+            row.sent_at = moment(row.sent_at).format("HH:mm");
+        });
         const socketsToEmitTo = socketIds.filter(
             socketId => socketId.userId === userId
         );
@@ -530,7 +537,13 @@ io.on("connection", async function(socket) {
         // get message by ID from database and join info about sender
 
         const pmAndSenderInfo = await db.getPmById(pmId.rows[0].id);
+
         const pmToEmit = pmAndSenderInfo.rows[0];
+
+        // format timestamp
+
+        pmToEmit.date = moment(pmToEmit.sent_at).format("ddd, D MMMM");
+        pmToEmit.sent_at = moment(pmToEmit.sent_at).format("HH:mm");
 
         // emit new private message to all sender and recipient sockets
 

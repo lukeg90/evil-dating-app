@@ -300,13 +300,14 @@ option {
 
 .chatConnections {
     position: absolute;
-    height: 100%;
+    height: 85%;
     width: 15%;
     right: -15%;
-    margin-top: 100px;
+    top: 15%;
     background: slategray;
     border-radius: 5px 0 0 5px;
     transition: 0.7s;
+    z-index: 3;
 }
 
 .animate {
@@ -314,9 +315,9 @@ option {
     transform: translateX(-100%);
 }
 
-.animateOut {
+.animate-two {
     transition-property: transform;
-    transform: translateX(100%);
+    transform: translateX(-150%);
 }
 
 .chatConnectionCard {
@@ -341,44 +342,94 @@ option {
     margin-left: 5px;
 }
 
-.chatMessagesContainer {
-    height: 100%;
+.chatContainer {
+    height: 85%;
     width: 30%;
     position: absolute;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
     right: -30%;
+    top: 15%;
+    border-radius: 5px 0 0 5px;
+    transition: 0.7s;
+    background: slategray;
+}
+
+.chatMessagesContainer {
+    height: 90%;
     overflow-y: scroll;
+    display: flex;
+    flex-direction: column;
+}
+
+.chatMessagesContainer::-webkit-scrollbar {
+    display: none;
+}
+
+.chatMessage {
+    max-width: 70%;
+    margin: 5px;
+    display: flex;
+}
+
+.chatDate {
+    align-self: center;
+    font-weight: bolder;
+}
+
+.myMessage {
+    align-self: flex-end;
+}
+
+.theirMessage {
+    align-self: flex-start;
+}
+
+.myMessage .chatBubble {
+    background: white;
+    border-radius: 10px;
+    padding: 5px;
+}
+
+.myMessage .chatBubble p {
+    font-size: 18px;
+    color: hotpink;
+    margin: 0;
+    font-weight: bolder;
+}
+
+.theirMessage .chatBubble {
+    background: hotpink;
+    border-radius: 10px;
+    padding: 5px;
+    margin-left: 5px;
+}
+
+.theirMessage .chatBubble p {
+    font-size: 18px;
+    color: white;
+    margin: 0;
+    font-weight: bolder;
+}
+
+.chatMessage img {
+    height: 35px;
+    width: 35px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.chatMessage .timestamp {
+    font-size: 14px;
+    font-style: italic;
+}
+
+.myMessage .timestamp {
+    color: hotpink;
 }
 
 .enterChatMessage {
     height: 75px;
-    width: 50%;
-    font-size: smaller;
-}
-
-.chatMessage {
-    display: flex;
-    margin-bottom: 20px;
-}
-
-.chatMessage img {
-    height: 75px;
-    width: 75px;
-    border: 1px solid white;
-    border-radius: 5px;
-    object-fit: cover;
-}
-
-.chatText {
-    display: flex;
-    flex-wrap: wrap;
-    margin-left: 20px;
-}
-
-.chatText h4 {
-    flex-basis: 100%;
-    margin: 0;
-}
-
-.chatText span {
-    font-weight: lighter;
+    width: 100%;
 }
