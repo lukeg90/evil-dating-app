@@ -1,6 +1,6 @@
 # Evil Dating App
 
-### I created this app as an experiment to illustrate how easy it is to be evil, to make an application which claims to do one thing but does another thing entirely. As a result, this app will never be deployed to the public.
+### I created this app as an experiment to illustrate how easy it is to be evil, to make an application which claims to do one thing but in fact does not have the best interest of the user at heart. As a result, this app will never be deployed to the public.
 
 ## Key Features
 
