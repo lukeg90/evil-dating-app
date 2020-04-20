@@ -8,6 +8,7 @@ import OtherProfile from "./other-profile";
 import Matches from "./matches";
 import Connections from "./connections";
 import Chat from "./chat";
+import Faq from "./faq";
 import { BrowserRouter, Route, Link, Redirect } from "react-router-dom";
 
 export default function App() {
@@ -103,6 +104,9 @@ export default function App() {
                         <Link to="/connections">
                             <h3 className="nav-link">Connections</h3>
                         </Link>
+                        <Link to="/faq">
+                            <h3 className="nav-link">FAQ</h3>
+                        </Link>
                         <h3 className="nav-link" onClick={() => logout()}>
                             Logout
                         </h3>
@@ -178,6 +182,7 @@ export default function App() {
                     path="/connections"
                     render={() => <Connections authorize={() => authorize()} />}
                 />
+                <Route exact path="/faq" render={() => <Faq />} />
             </BrowserRouter>
             {showUploader && (
                 <Uploader

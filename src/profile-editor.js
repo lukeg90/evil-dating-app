@@ -1,6 +1,7 @@
 import React from "react";
 import axios from "./axios";
 import List from "./profile-editor-list";
+import Disclaimer from "./disclaimer";
 import moment from "moment";
 
 export default class ProfileEditor extends React.Component {
@@ -8,7 +9,8 @@ export default class ProfileEditor extends React.Component {
         super(props);
         // internal state needs to update after all inputs but database and app state is only updated after clicking save
         this.state = {
-            beingEdited: false
+            beingEdited: false,
+            showDisclaimer: false
         };
     }
     handleChange({ target }) {
@@ -34,6 +36,7 @@ export default class ProfileEditor extends React.Component {
         }
     }
     // NEED TO FIX. somehow it's removing interests from app state as well. Is it because innerHTML is removed?
+    // temporary fix is to reload window when user clicks cancel
     removeElement(e, array, stateProp) {
         console.log(
             "remove elment event: ",
@@ -103,7 +106,10 @@ export default class ProfileEditor extends React.Component {
                         onChange={e => this.handleChange(e)}
                     />
                     <br />
-                    <div onChange={e => this.handleChange(e)}>
+                    <div
+                        className="radioOptions"
+                        onChange={e => this.handleChange(e)}
+                    >
                         <p className="label">Gender:</p>
                         <label htmlFor="male">Male</label>
                         <input
@@ -130,7 +136,10 @@ export default class ProfileEditor extends React.Component {
                             checked={this.state.gender == "other"}
                         />
                     </div>
-                    <div onChange={e => this.handleChange(e)}>
+                    <div
+                        className="radioOptions"
+                        onChange={e => this.handleChange(e)}
+                    >
                         <p className="label">Interested in:</p>
                         <label htmlFor="males">Males</label>
                         <input
@@ -227,6 +236,12 @@ export default class ProfileEditor extends React.Component {
                     >
                         Add
                     </button>
+                    <a
+                        className="disclaimer"
+                        onClick={() => this.setState({ showDisclaimer: true })}
+                    >
+                        Why do we ask for this?
+                    </a>
                     <br />
                     <p className="label">About Me:</p>
                     <textarea
@@ -245,13 +260,20 @@ export default class ProfileEditor extends React.Component {
             // display current profile
             return (
                 <div className="updatedProfile">
-                    <h3>Age: {this.convertDateToAge(this.props.birthday)}</h3>
-                    <h3>{this.props.about}</h3>
-                    <br />
-                    <h3>Gender: {this.props.gender}</h3>
-                    <h3>Looking for: {this.props.seeking}</h3>
                     <h3>
-                        Interests:{" "}
+                        Age |{" "}
+                        <span>
+                            {this.convertDateToAge(this.props.birthday)}
+                        </span>
+                    </h3>
+                    <h3>
+                        Gender | <span>{this.props.gender}</span>
+                    </h3>
+                    <h3>
+                        Looking for | <span>{this.props.seeking}</span>
+                    </h3>
+                    <h3>
+                        Interests |{" "}
                         {this.props.interests.length > 0 ? (
                             <span>{this.props.interests.join(", ")}</span>
                         ) : (
@@ -259,9 +281,17 @@ export default class ProfileEditor extends React.Component {
                         )}
                     </h3>
                     <h3>
-                        Current symptoms:{" "}
+                        Current symptoms |{" "}
                         {this.props.symptoms.length > 0 ? (
                             <span>{this.props.symptoms.join(", ")}</span>
+                        ) : (
+                            <span>none</span>
+                        )}
+                    </h3>
+                    <h3 className="about">
+                        Bio |{" "}
+                        {this.props.about ? (
+                            <span>{this.props.about}</span>
                         ) : (
                             <span>none</span>
                         )}
@@ -291,6 +321,13 @@ export default class ProfileEditor extends React.Component {
                     <div className="error">Oops, something went wrong</div>
                 )}
                 {this.getCurrentDisplay()}
+                {this.state.showDisclaimer && (
+                    <Disclaimer
+                        hideDisclaimer={() =>
+                            this.setState({ showDisclaimer: false })
+                        }
+                    />
+                )}
             </React.Fragment>
         );
     }

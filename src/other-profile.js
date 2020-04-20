@@ -67,13 +67,22 @@ export default class OtherProfile extends React.Component {
                     <h1 className="bioName">{this.state.first}</h1>
                     {this.state.birthday && (
                         <h3>
-                            Age: {this.convertDateToAge(this.state.birthday)}
+                            Age |{" "}
+                            <span>
+                                {this.convertDateToAge(this.state.birthday)}
+                            </span>
                         </h3>
                     )}
-                    <h3>{this.state.about}</h3>
-                    <br />
                     {this.state.interests.length > 0 && (
-                        <h3>I like {this.state.interests.join(", ")}</h3>
+                        <h3>
+                            Interests |{" "}
+                            <span>{this.state.interests.join(", ")}</span>
+                        </h3>
+                    )}
+                    {this.state.about && (
+                        <h3 className="about">
+                            Bio | <span>{this.state.about}</span>
+                        </h3>
                     )}
                 </div>
             </React.Fragment>

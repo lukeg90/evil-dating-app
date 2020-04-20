@@ -134,6 +134,10 @@ button:hover {
     cursor: pointer;
 }
 
+.disclaimer-text {
+    margin: 40px;
+}
+
 input[type="file"] {
     display: none;
 }
@@ -188,6 +192,12 @@ textarea {
 input[type="radio"] {
     height: 20px;
     width: 20px;
+    vertical-align: middle;
+}
+
+.radioOptions label {
+    font-weight: bolder;
+    margin: 5px;
 }
 
 select {
@@ -215,8 +225,14 @@ option {
 }
 
 .editorListText {
+    font-weight: bolder;
     color: hotpink;
     margin: 10px;
+}
+
+.disclaimer:hover {
+    cursor: pointer;
+    text-decoration: underline;
 }
 
 .editorRemoveListElement {
@@ -238,6 +254,23 @@ option {
 /* .editorListElement:hover .editorRemoveListElement:hover {
     text-decoration: underline;
 } */
+
+.updatedProfile h3 {
+    font-size: x-large;
+}
+
+.updatedProfile span {
+    font-size: smaller;
+    display: inline-block;
+}
+
+.bio h3 {
+    font-size: x-large;
+}
+
+.bio span {
+    font-size: smaller;
+}
 
 .userCard {
     display: flex;
