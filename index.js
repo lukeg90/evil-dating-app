@@ -344,6 +344,7 @@ app.get("/matches.json", (req, res) => {
     // first get current user and all users
     let loggedInUser;
     let allUsers;
+    let matches;
     db.getUserById(req.session.userId)
         .then(({ rows }) => {
             loggedInUser = rows[0];
@@ -353,9 +354,24 @@ app.get("/matches.json", (req, res) => {
         .then(({ rows }) => {
             allUsers = rows;
             // match-making logic here
-            const matches = match(loggedInUser, allUsers);
+            matches = match(loggedInUser, allUsers);
             console.log("Matches: ", matches);
-            //
+            // send only matches who are not already connections
+            // need to get all connections and then filter matches
+            return db.getConnections(req.session.userId);
+        })
+        .then(({ rows }) => {
+            console.log("All connections: ", rows);
+            const connections = rows;
+            // remove match if they are already connection
+            matches.forEach((match, index) => {
+                connections.forEach(connection => {
+                    if (connection.id == match.id) {
+                        matches.splice(index, 1);
+                    }
+                });
+            });
+            console.log("Matches after crazy loops: ", matches);
             if (!req.query.q) {
                 res.json({ success: true, users: matches });
             } else {

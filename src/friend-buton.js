@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "./axios";
 
 export default function FriendButton({ otherUserId }) {
-    const [buttonText, setButtonText] = useState("Send Friend Request");
+    const [buttonText, setButtonText] = useState("Request Connection");
     const [error, setError] = useState(false);
 
     useEffect(() => {
@@ -14,33 +14,33 @@ export default function FriendButton({ otherUserId }) {
                 if (data.success) {
                     console.log("Successfully determined state of friendship");
                     if (data.accepted) {
-                        setButtonText("End Friendship");
+                        setButtonText("End Connection");
                     } else if (data.awaitingUserAction) {
-                        setButtonText("Accept Friend Request");
+                        setButtonText("Accept Connection Request");
                     } else if (data.awaitingOtherAction) {
-                        setButtonText("Cancel Friend Request");
+                        setButtonText("Cancel Connection Request");
                     }
                 } else {
                     console.log("No current friendship status");
-                    setButtonText("Send Friend Request");
+                    setButtonText("Request Connection");
                 }
             });
     }, []);
     const handleClick = () => {
-        if (buttonText == "Send Friend Request") {
+        if (buttonText == "Request Connection") {
             axios
                 .post(`/make-friend-request/${otherUserId}`)
                 .then(({ data }) => {
                     if (data.success) {
-                        setButtonText("Cancel Friend Request");
+                        setButtonText("Cancel Connection Request");
                     } else {
                         setError(true);
                     }
                 });
-        } else if (buttonText == "Accept Friend Request") {
+        } else if (buttonText == "Accept Connection Request") {
             axios.post(`/add-friendship/${otherUserId}`).then(({ data }) => {
                 if (data.success) {
-                    setButtonText("End Friendship");
+                    setButtonText("End Connection");
                 } else {
                     setError(true);
                 }
@@ -48,7 +48,7 @@ export default function FriendButton({ otherUserId }) {
         } else {
             axios.post(`/end-friendship/${otherUserId}`).then(({ data }) => {
                 if (data.success) {
-                    setButtonText("Send Friend Request");
+                    setButtonText("Request Connection");
                 } else {
                     setError(true);
                 }

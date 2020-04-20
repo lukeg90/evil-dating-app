@@ -157,7 +157,7 @@ exports.endFriendship = (userId, otherId) => {
 
 exports.getAllUsers = () => {
     const q = `
-        SELECT * FROM users
+        SELECT users.id, first, image_url, birthday, gender, seeking, interests, symptoms FROM users
         JOIN user_profiles
         ON user_profiles.user_id = users.id
     `;
@@ -171,6 +171,18 @@ exports.getConnectionsWannabes = userId => {
         JOIN users
         ON (accepted = false AND receiver_id = $1 AND sender_id = users.id)
         OR (accepted = true AND receiver_id = $1 AND sender_id = users.id)
+        OR (accepted = true AND sender_id = $1 AND receiver_id = users.id)
+    `;
+    const params = [userId];
+    return db.query(q, params);
+};
+
+exports.getConnections = userId => {
+    const q = `
+        SELECT users.id, first, image_url, accepted
+        FROM friendships
+        JOIN users
+        ON (accepted = true AND receiver_id = $1 AND sender_id = users.id)
         OR (accepted = true AND sender_id = $1 AND receiver_id = users.id)
     `;
     const params = [userId];

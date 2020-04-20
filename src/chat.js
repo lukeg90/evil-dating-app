@@ -68,8 +68,6 @@ export default function Chat({ show, setShow, userId }) {
         setSelectedConnection(id);
     };
 
-    const determineClass = () => {};
-
     return (
         <div
             className={`chatOverlay ${show ? "on" : ""}`}
@@ -80,6 +78,7 @@ export default function Chat({ show, setShow, userId }) {
                 onClick={e => handleChatConnectionsClick(e)}
             >
                 {connections &&
+                    // render online and offline connections separately?
                     connections.map(connection => (
                         <div
                             className="chatConnectionCard"
@@ -88,6 +87,11 @@ export default function Chat({ show, setShow, userId }) {
                         >
                             <img src={connection.image_url} />
                             <span>{connection.first}</span>
+                            <span
+                                className={
+                                    connection.online ? "online" : "offline"
+                                }
+                            ></span>
                         </div>
                     ))}
             </div>
@@ -99,35 +103,36 @@ export default function Chat({ show, setShow, userId }) {
             >
                 <div className="chatMessagesContainer" ref={elemRef}>
                     {privateMessages &&
-                        privateMessages.map((message, index, array) =>
-                            // return div with date if necessary
-                            index == 0 ||
-                            message.date != array[index - 1].date ? (
-                                <div className="chatDate">
-                                    <p>{message.date}</p>
-                                </div>
-                            ) : (
-                                // return div with chat message if not date
-                                <div
-                                    key={message.id}
-                                    className={`chatMessage ${
-                                        message.sender_id == userId
-                                            ? "myMessage"
-                                            : "theirMessage"
-                                    }`}
-                                >
-                                    {message.receiver_id == userId && (
-                                        <img src={message.image_url} />
+                        privateMessages.map((message, index, array) => {
+                            return (
+                                <React.Fragment key={message.id}>
+                                    {(index == 0 ||
+                                        message.date !=
+                                            array[index - 1].date) && (
+                                        <div className="chatDate">
+                                            <p>{message.date}</p>
+                                        </div>
                                     )}
-                                    <div className="chatBubble">
-                                        <p>{message.message}</p>
-                                        <span className="timestamp">
-                                            {message.sent_at}
-                                        </span>
+                                    <div
+                                        className={`chatMessage ${
+                                            message.sender_id == userId
+                                                ? "myMessage"
+                                                : "theirMessage"
+                                        }`}
+                                    >
+                                        {message.receiver_id == userId && (
+                                            <img src={message.image_url} />
+                                        )}
+                                        <div className="chatBubble">
+                                            <p>{message.message}</p>
+                                            <span className="timestamp">
+                                                {message.sent_at}
+                                            </span>
+                                        </div>
                                     </div>
-                                </div>
-                            )
-                        )}
+                                </React.Fragment>
+                            );
+                        })}
                 </div>
                 <textarea
                     className="enterChatMessage"

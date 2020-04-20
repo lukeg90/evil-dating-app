@@ -74,6 +74,9 @@ export default class Registration extends React.Component {
                 <p>
                     Already a member? <Link to="/login">Log in</Link>
                 </p>
+                <p>
+                    <Link to="/about">About us</Link>
+                </p>
             </div>
         );
     }

@@ -18,7 +18,7 @@ export default function Matches({ authorize }) {
                     setMatches(data.users);
                 }
                 setError(false);
-                console.log("response received from server");
+                console.log("response received from server", data.users);
             } else {
                 console.log("error getting users from server");
                 setError(true);

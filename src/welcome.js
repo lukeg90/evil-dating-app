@@ -3,6 +3,7 @@ import { HashRouter, Route } from "react-router-dom";
 import Registration from "./register";
 import Login from "./login";
 import ResetPassword from "./reset-password";
+import About from "./about";
 
 export default class Welcome extends React.Component {
     constructor(props) {
@@ -20,6 +21,7 @@ export default class Welcome extends React.Component {
                     <div>
                         <Route exact path="/" component={Registration} />
                         <Route path="/login" component={Login} />
+                        <Route path="/about" component={About} />
                         <Route
                             path="/reset-password"
                             component={ResetPassword}

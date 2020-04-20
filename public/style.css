@@ -4,6 +4,10 @@
     color: white;
 }
 
+.blurb {
+    text-align: center;
+}
+
 header {
     margin-bottom: 50px;
 }
@@ -256,7 +260,7 @@ option {
 
 .friendButton {
     display: block;
-    width: 250px;
+    width: 300px;
 }
 
 .connections {
@@ -292,6 +296,7 @@ option {
     left: 0;
     background: rgba(0, 0, 0, 0.5);
     visibility: hidden;
+    z-index: 1;
 }
 
 .on {
@@ -432,4 +437,5 @@ option {
 .enterChatMessage {
     height: 75px;
     width: 100%;
+    resize: none;
 }

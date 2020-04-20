@@ -7,7 +7,7 @@ export default function MatchList({ users, authorize }) {
             className="userCard"
             key={user.id}
             onClick={() => authorize()}
-            to={"/user/" + user.user_id}
+            to={"/user/" + user.id}
         >
             <img src={user.image_url} />
             <h3>{user.first}</h3>

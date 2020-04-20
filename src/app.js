@@ -48,6 +48,7 @@ export default function App() {
     };
 
     const setProfileFromChild = updatedProfile => {
+        console.log("Updated profile from child:: ", updatedProfile);
         const {
             birthday,
             gender,
@@ -56,6 +57,7 @@ export default function App() {
             symptoms,
             about
         } = updatedProfile;
+        console.log("birthday in updated profile: ", birthday);
         setProfile({
             ...profile,
             birthday,
@@ -65,7 +67,7 @@ export default function App() {
             symptoms,
             about
         });
-        console.log("Profile updated in App: ", profile);
+        setProfileUpdated(true);
     };
 
     const logout = () => {
@@ -162,7 +164,7 @@ export default function App() {
                                     history={props.history}
                                 />
                             ) : (
-                                <Redirect to="/" />
+                                <Redirect to="/matches" />
                             )
                         }
                     />
