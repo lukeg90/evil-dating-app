@@ -30,10 +30,10 @@ export default function Faq() {
                 A: Not at all! Our matching algorithm was designed in
                 consultation with top medical experts, who determined that
                 people with the same benign symptoms can meet without any danger
-                of spreading disease to each other. If our alogorithm determines
-                that you are a likely carrier of COVID-19, you will simply be
-                matched to someone else with the same symptoms. Sick people need
-                love too!{" "}
+                of spreading disease to each other. Even if our alogorithm
+                determines that you are a likely carrier of COVID-19, you will
+                simply be matched to someone else with the same symptoms. Sick
+                people need love too!{" "}
             </h2>
             <br />
         </div>
