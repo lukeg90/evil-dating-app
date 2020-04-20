@@ -392,6 +392,7 @@ option {
     border-radius: 5px 0 0 5px;
     transition: 0.7s;
     background: slategray;
+    padding-right: 10px;
 }
 
 .chatMessagesContainer {
