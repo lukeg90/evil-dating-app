@@ -364,12 +364,13 @@ app.get("/matches.json", (req, res) => {
             console.log("All connections: ", rows);
             const connections = rows;
             // remove match if they are already connection
-            matches.forEach((match, index) => {
-                connections.forEach(connection => {
-                    if (connection.id == match.id) {
-                        matches.splice(index, 1);
+            connections.forEach(connection => {
+                // use reverse loop so index isn't messed up
+                for (let i = matches.length - 1; i >= 0; i--) {
+                    if (connection.id == matches[i].id) {
+                        matches.splice(i, 1);
                     }
-                });
+                }
             });
             console.log("Matches after crazy loops: ", matches);
             if (!req.query.q) {
