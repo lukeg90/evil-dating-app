@@ -9,7 +9,7 @@ export default function MatchList({ users, authorize }) {
             onClick={() => authorize()}
             to={"/user/" + user.id}
         >
-            <img src={user.image_url} />
+            <img src={user.image_url || "/default.png"} />
             <h3>{user.first}</h3>
         </Link>
     ));

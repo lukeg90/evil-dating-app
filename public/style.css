@@ -358,6 +358,9 @@ option {
     transform: translateX(-150%);
 }
 
+.noConnections {
+    text-align: center;
+}
 .chatConnectionCard {
     width: 100%;
     padding: 10px;

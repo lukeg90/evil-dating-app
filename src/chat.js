@@ -77,15 +77,14 @@ export default function Chat({ show, setShow, userId }) {
                 className={`chatConnections ${show ? "animate" : ""}`}
                 onClick={e => handleChatConnectionsClick(e)}
             >
-                {connections &&
-                    // render online and offline connections separately?
+                {connections && connections.length > 0 ? (
                     connections.map(connection => (
                         <div
                             className="chatConnectionCard"
                             key={connection.id}
                             onClick={e => handleChatCardClick(e, connection.id)}
                         >
-                            <img src={connection.image_url} />
+                            <img src={connection.image_url || "/default.png"} />
                             <span>{connection.first}</span>
                             <span
                                 className={
@@ -93,7 +92,12 @@ export default function Chat({ show, setShow, userId }) {
                                 }
                             ></span>
                         </div>
-                    ))}
+                    ))
+                ) : (
+                    <div className="noConnections">
+                        <h4>No connections</h4>
+                    </div>
+                )}
             </div>
             <div
                 className={`chatContainer ${

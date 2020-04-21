@@ -19,7 +19,7 @@ export default function ConnectionList({
                 onClick={() => authorize()}
                 to={"/user/" + user.id}
             >
-                <img src={user.image_url} />
+                <img src={user.image_url || "/default.png"} />
             </Link>
             <div className="cardText">
                 <h3>{user.first}</h3>
